@@ -15,7 +15,7 @@ install:
   - yarn global add codecov
 
 script:
-  - yarn test
+  # - yarn test
   # - yarn run coverage
   # - yarn run check-coverage
   # - codecov --token=$CODECOV_TOKEN
@@ -26,4 +26,4 @@ after_success:
 #  - bash <(curl -s https://codecov.io/bash)
 
 after_script:
-  - yarn run report-coverage
+  # - yarn run report-coverage
