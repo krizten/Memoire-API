@@ -1,7 +1,9 @@
 import { config } from 'dotenv';
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 
+import { FileLogger } from 'src/shared/file-logger.service';
 import { EntryService } from './entry.service';
+import { EntryDTO } from 'src/dto/entry';
 
 config();
 
@@ -17,5 +19,11 @@ export class EntryController {
   @Get(':id')
   getEntry(@Param('id') id: string) {
     return this.entryService.getOne(id);
+  }
+
+  @Post()
+  addEntry(@Body() data: EntryDTO) {
+    FileLogger.log(data);
+    return this.entryService.add(data);
   }
 }
