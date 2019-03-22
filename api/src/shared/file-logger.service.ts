@@ -33,7 +33,7 @@ export class FileLogger {
     exitOnError: false,
   });
 
-  static log(message: string) {
+  static log(message: any) {
     FileLogger.logger.log('info', message);
   }
 
