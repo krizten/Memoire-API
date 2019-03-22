@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put } from '@nestjs/common';
 
 import { FileLogger } from 'src/shared/file-logger.service';
 import { EntryService } from './entry.service';
@@ -25,5 +25,10 @@ export class EntryController {
   addEntry(@Body() data: EntryDTO) {
     FileLogger.log(data);
     return this.entryService.add(data);
+  }
+
+  @Put(':id')
+  editEntry(@Param('id') id: string, @Body() data: Partial<EntryDTO>) {
+    return this.entryService.edit(id, data);
   }
 }
