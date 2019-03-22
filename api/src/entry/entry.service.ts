@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { EntryEntity } from './entry.entity';
+import { Entry } from 'src/types/entry';
 
 @Injectable()
 export class EntryService {
@@ -11,7 +12,7 @@ export class EntryService {
     private entryRepository: Repository<EntryEntity>,
   ) {}
 
-  async getAll(): Promise<any[]> {
+  async getAll(): Promise<Entry[]> {
     return await this.entryRepository.find();
   }
 }
