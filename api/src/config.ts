@@ -19,8 +19,8 @@ switch (process.env.NODE_ENV) {
         synchronize: (process.env.DB_SYNC === 'true'),
         logging: (process.env.DB_LOG === 'true'),
         entities: [
-          'api/src/**/*.entity.ts',
-          'api/dist/**/*.entity.js',
+          './src/**/*.entity.ts',
+          './dist/**/*.entity.js',
         ],
       },
     };
@@ -40,8 +40,8 @@ switch (process.env.NODE_ENV) {
         synchronize: (process.env.DB_SYNC === 'true'),
         logging: (process.env.DB_LOG === 'true'),
         entities: [
-          'api/src/**/*.entity.ts',
-          'api/dist/**/*.entity.js',
+          './src/**/*.entity.ts',
+          './dist/**/*.entity.js',
         ],
       },
     };
@@ -61,8 +61,8 @@ switch (process.env.NODE_ENV) {
         synchronize: (process.env.DB_SYNC === 'true'),
         logging: (process.env.DB_LOG === 'true'),
         entities: [
-          'api/src/**/*.entity.ts',
-          'api/dist/**/*.entity.js',
+          './src/**/*.entity.ts',
+          './dist/**/*.entity.js',
         ],
       },
     };
