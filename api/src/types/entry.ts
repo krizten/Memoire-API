@@ -7,5 +7,5 @@ export interface Entry {
   title: string;
   content: string;
   image?: string;
-  location?: ICoordinates;
+  geolocation?: ICoordinates;
 }

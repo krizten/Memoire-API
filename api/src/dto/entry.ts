@@ -11,5 +11,5 @@ export class EntryDTO {
   @IsString()
   readonly image?: string;
 
-  readonly location?: ICoordinates;
+  readonly geolocation?: ICoordinates;
 }

@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   Column,
 } from 'typeorm';
+import { ICoordinates } from 'src/types/coordinates';
 
 @Entity('entries')
 export class EntryEntity {
@@ -22,4 +23,10 @@ export class EntryEntity {
 
   @Column('text')
   content: string;
+
+  @Column('text', { nullable: true })
+  image: string;
+
+  @Column('json', { nullable: true })
+  geolocation: ICoordinates;
 }
