@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
+
 import { EntryService } from './entry.service';
 
 config();
@@ -11,5 +12,10 @@ export class EntryController {
   @Get()
   getAllEntries() {
     return this.entryService.getAll();
+  }
+
+  @Get(':id')
+  getEntry(@Param('id') id: string) {
+    return this.entryService.getOne(id);
   }
 }

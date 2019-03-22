@@ -15,4 +15,8 @@ export class EntryService {
   async getAll(): Promise<Entry[]> {
     return await this.entryRepository.find();
   }
+
+  async getOne(id: string): Promise<Entry> {
+    return await this.entryRepository.findOne({ where: { id }});
+  }
 }
