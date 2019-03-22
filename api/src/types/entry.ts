@@ -1,6 +1,6 @@
 import { ICoordinates } from './coordinates';
 
-export interface Entry {
+export interface IEntry {
   id: string;
   created: Date;
   updated: Date;
