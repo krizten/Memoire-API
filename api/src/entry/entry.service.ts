@@ -34,4 +34,9 @@ export class EntryService {
 
     return idea;
   }
+
+  async delete(id: string) {
+    await this.entryRepository.delete({ id });
+    return { message: 'Entry deleted successfully' };
+  }
 }
