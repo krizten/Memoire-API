@@ -37,7 +37,7 @@ export class FileLogger {
     FileLogger.logger.log('info', message);
   }
 
-  static error(message: string, trace?: string) {
+  static error(message: any, trace?: string) {
     FileLogger.logger.error(message);
   }
 
