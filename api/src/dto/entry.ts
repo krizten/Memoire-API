@@ -13,6 +13,5 @@ export class EntryDTO {
   @IsUrl()
   readonly image?: string;
 
-  @ValidateIf(obj => (obj.geolocation) ? true : false)
   readonly geolocation?: ICoordinates;
 }

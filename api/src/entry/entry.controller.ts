@@ -46,6 +46,7 @@ export class EntryController {
   }
 
   @Put(':id')
+  @UsePipes(new ValidationPipe())
   editEntry(@Param('id') id: string, @Body() data: Partial<EntryDTO>) {
     FileLogger.log({
       method: 'PUT',
