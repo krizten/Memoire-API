@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsString, ValidateIf, IsUrl } from 'class-validator';
 import { ICoordinates } from 'src/types/coordinates';
 
 export class EntryDTO {
@@ -8,7 +8,9 @@ export class EntryDTO {
   @IsString()
   readonly content: string;
 
+  @ValidateIf(obj => (obj.image) ? true : false)
   @IsString()
+  @IsUrl()
   readonly image?: string;
 
   readonly geolocation?: ICoordinates;

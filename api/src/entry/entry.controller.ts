@@ -8,11 +8,13 @@ import {
   Put,
   Delete,
   Logger,
+  UsePipes,
 } from '@nestjs/common';
 
 import { FileLogger } from 'src/shared/file-logger.service';
 import { EntryService } from './entry.service';
 import { EntryDTO } from 'src/dto/entry';
+import { ValidationPipe } from 'src/shared/validation.pipe';
 
 config();
 
@@ -33,6 +35,7 @@ export class EntryController {
   }
 
   @Post()
+  @UsePipes(new ValidationPipe())
   addEntry(@Body() data: EntryDTO) {
     FileLogger.log({
       method: 'POST',
@@ -43,6 +46,7 @@ export class EntryController {
   }
 
   @Put(':id')
+  @UsePipes(new ValidationPipe())
   editEntry(@Param('id') id: string, @Body() data: Partial<EntryDTO>) {
     FileLogger.log({
       method: 'PUT',
