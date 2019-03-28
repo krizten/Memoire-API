@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { EntryEntity } from './entry.entity';
 import { EntryDTO } from 'src/dto/entry';
-import { IResponse } from 'src/types/response';
+import { IResponse } from 'src/interfaces/response';
 
 @Injectable()
 export class EntryService {
