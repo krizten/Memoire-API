@@ -11,9 +11,11 @@ import {
 
 export class UserDTO {
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @MinLength(6)
+  @IsString()
   @IsNotEmpty()
   password: string;
 
