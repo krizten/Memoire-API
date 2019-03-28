@@ -5,7 +5,7 @@ import {
   UpdateDateColumn,
   Column,
 } from 'typeorm';
-import { ICoordinates } from 'src/types/coordinates';
+import { ICoordinates } from 'src/interfaces/coordinates';
 
 @Entity('entries')
 export class EntryEntity {

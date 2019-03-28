@@ -1,5 +1,5 @@
 import { IsString, ValidateIf, IsUrl } from 'class-validator';
-import { ICoordinates } from 'src/types/coordinates';
+import { ICoordinates } from 'src/interfaces/coordinates';
 
 export class EntryDTO {
   @IsString()
