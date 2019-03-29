@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
 
-import { UserDTO } from 'src/dto/user';
+import { SignupDTO } from 'src/dto/signup';
 import { UserEntity } from './user.entity';
 import { IResponse } from 'src/interfaces/response';
 
@@ -44,7 +44,7 @@ export class UserService {
     };
   }
 
-  async signup(data: UserDTO) {
+  async signup(data: SignupDTO) {
     const email = data.email;
     let user = await this.userRepository.findOne({ where: { email }});
     if (user) {
