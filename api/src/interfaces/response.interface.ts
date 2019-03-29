@@ -1,4 +1,4 @@
-import { IError } from './error';
+import { IError } from './error.interface';
 
 export interface IResponse {
   summary: string;

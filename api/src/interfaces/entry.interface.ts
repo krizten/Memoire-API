@@ -1,4 +1,4 @@
-import { ICoordinates } from './coordinates';
+import { ICoordinates } from './coordinates.interface';
 
 export interface IEntry {
   id: string;
