@@ -3,8 +3,8 @@ import { Controller, Post, Body, UsePipes, Logger } from '@nestjs/common';
 import { FileLogger } from 'src/shared/file-logger.service';
 import { ValidationPipe } from 'src/shared/validation.pipe';
 import { UserService } from './user.service';
-import { LoginDTO } from 'src/dto/login';
-import { SignupDTO } from 'src/dto/signup';
+import { LoginDTO } from 'src/dto/login.dto';
+import { SignupDTO } from 'src/dto/signup.dto';
 
 @Controller(`${process.env.BASE_PATH}/auth`)
 export class UserController {

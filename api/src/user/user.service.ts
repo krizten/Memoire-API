@@ -6,9 +6,9 @@ import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 
 import { UserEntity } from './user.entity';
-import { IResponse } from 'src/interfaces/response';
-import { LoginDTO } from 'src/dto/login';
-import { SignupDTO } from 'src/dto/signup';
+import { IResponse } from 'src/interfaces/response.interface';
+import { LoginDTO } from 'src/dto/login.dto';
+import { SignupDTO } from 'src/dto/signup.dto';
 
 config();
 

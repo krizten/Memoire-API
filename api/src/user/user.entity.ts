@@ -4,8 +4,10 @@ import {
   Column,
   CreateDateColumn,
   BeforeInsert,
+  OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import { EntryEntity } from 'src/entry/entry.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -38,6 +40,9 @@ export class UserEntity {
 
   @Column('text', { nullable: true })
   bio: string;
+
+  @OneToMany(type => EntryEntity, entry => entry.author)
+  entries: EntryEntity[];
 
   @BeforeInsert()
   async hashPassword() {
