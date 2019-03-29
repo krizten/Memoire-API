@@ -9,16 +9,19 @@ import {
   Delete,
   Logger,
   UsePipes,
+  UseGuards,
 } from '@nestjs/common';
 
 import { FileLogger } from 'src/shared/file-logger.service';
 import { EntryService } from './entry.service';
 import { EntryDTO } from 'src/dto/entry';
 import { ValidationPipe } from 'src/shared/validation.pipe';
+import { AuthGuard } from 'src/shared/auth.guard';
 
 config();
 
 @Controller(`${process.env.BASE_PATH}/entries`)
+@UseGuards(new AuthGuard())
 export class EntryController {
   constructor(private entryService: EntryService) {}
 
