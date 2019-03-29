@@ -1,9 +1,10 @@
 import { Controller, Post, Body, UsePipes, Logger } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserDTO } from 'src/dto/user';
-import { ValidationPipe } from 'src/shared/validation.pipe';
+
 import { FileLogger } from 'src/shared/file-logger.service';
+import { ValidationPipe } from 'src/shared/validation.pipe';
+import { UserService } from './user.service';
 import { LoginDTO } from 'src/dto/login';
+import { SignupDTO } from 'src/dto/signup';
 
 @Controller(`${process.env.BASE_PATH}/auth`)
 export class UserController {
@@ -14,7 +15,7 @@ export class UserController {
 
   @Post('/signup')
   @UsePipes(new ValidationPipe())
-  signup(@Body() data: UserDTO) {
+  signup(@Body() data: SignupDTO) {
     FileLogger.log({
       method: 'POST',
       data,

@@ -5,10 +5,10 @@ import { Repository } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 
-import { UserDTO } from 'src/dto/user';
 import { UserEntity } from './user.entity';
 import { IResponse } from 'src/interfaces/response';
 import { LoginDTO } from 'src/dto/login';
+import { SignupDTO } from 'src/dto/signup';
 
 config();
 
@@ -51,7 +51,7 @@ export class UserService {
     };
   }
 
-  async signup(data: UserDTO): Promise<IResponse> {
+  async signup(data: SignupDTO): Promise<IResponse> {
     const email = data.email;
     let user = await this.userRepository.findOne({ where: { email }});
     if (user) {
