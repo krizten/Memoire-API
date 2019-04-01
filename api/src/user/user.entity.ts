@@ -17,6 +17,9 @@ export class UserEntity {
   @CreateDateColumn()
   created: Date;
 
+  @Column('text')
+  name: string;
+
   @Column({
     type: 'text',
     unique: true,
