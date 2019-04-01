@@ -1,6 +1,14 @@
-import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { getConnection } from 'typeorm';
 import { config } from 'dotenv';
 import * as jwt from 'jsonwebtoken';
+import { InvalidatedTokenEntity } from 'src/user/token.entity';
 
 config();
 
@@ -25,6 +33,21 @@ export class AuthGuard implements CanActivate {
       throw new HttpException('Invalid Token ', HttpStatus.FORBIDDEN);
     }
     const token = bearerToken.split(' ')[1];
+
+    // check if token has not been invalidated on logout
+    const loggedOutToken = await getConnection()
+      .createQueryBuilder()
+      .select('token')
+      .from(InvalidatedTokenEntity, 'token')
+      .where('token.token = :token', { token })
+      .getOne();
+
+    if (loggedOutToken) {
+      throw new HttpException(
+        'Invalid Token: token has been invalidated on logout.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     try {
       const decodedToken = await jwt.verify(token, process.env.SECRET);
       return decodedToken;

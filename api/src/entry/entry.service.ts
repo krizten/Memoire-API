@@ -30,7 +30,7 @@ export class EntryService {
     };
   }
 
-  // validate uuid. [credits: Jake Taylor (https://gist.github.com/bugventure/f71337e3927c34132b9a)]
+  // validate uuid. [regex: Jake Taylor (https://gist.github.com/bugventure/f71337e3927c34132b9a)]
   private validateUUID(uuid: string) {
     const uuidV4Regex = /^[A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$/i;
     if (!uuidV4Regex.test(uuid)) {
