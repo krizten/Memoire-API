@@ -1,9 +1,5 @@
 import { config } from 'dotenv';
-import {
-  Injectable,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getConnection } from 'typeorm';
 import { Request } from 'express';
@@ -15,6 +11,7 @@ import { IResponse } from 'src/interfaces/response.interface';
 import { LoginDTO } from 'src/dto/login.dto';
 import { SignupDTO } from 'src/dto/signup.dto';
 import { InvalidatedTokenEntity } from './token.entity';
+import { ChangePasswordDTO } from 'src/dto/change-password.dto';
 
 config();
 
@@ -94,7 +91,7 @@ export class UserService {
     return this.responseFormat('Login successful', user, HttpStatus.OK, true);
   }
 
-  async logout(request: Request) {
+  async logout(request: Request): Promise<IResponse> {
     const bearerToken: any = request.headers.authorization.split(' ')[1];
 
     const token = await this.tokenRepository.findOne({
@@ -114,5 +111,57 @@ export class UserService {
       .values({ token: bearerToken })
       .execute();
     return this.responseFormat('Logout successful');
+  }
+
+  async changePassword(
+    request: Request,
+    userId: string,
+    data: ChangePasswordDTO,
+  ) {
+    const bearerToken: any = request.headers.authorization.split(' ')[1];
+    const { currentPassword, newPassword, confirmPassword } = data;
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+    const passwordMatch = await this.checkPassword(
+      currentPassword,
+      user.password,
+    );
+    if (!passwordMatch) {
+      throw new HttpException(
+        'Current password is incorrect',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (newPassword !== confirmPassword) {
+      throw new HttpException(
+        'New password and confirm password do not match',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (currentPassword === newPassword) {
+      throw new HttpException(
+        'Current password and new password should be different',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // update password (hash updated password before updating)
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.userRepository.update(
+      { id: userId },
+      { password: hashedPassword },
+    );
+
+    // invalidate current token
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(InvalidatedTokenEntity)
+      .values({ token: bearerToken })
+      .execute();
+
+    return this.responseFormat('Password changed successfully');
   }
 }
