@@ -57,4 +57,9 @@ export class UserController {
     this.logger.log(`${JSON.stringify({ method: 'POST', user, data })}`);
     return this.userService.changePassword(request, user, data);
   }
+
+  @Post('/forgot-password')
+  forgotPassword() {
+    //
+  }
 }
