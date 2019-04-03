@@ -62,7 +62,11 @@ export class UserController {
   @Post('/forgot-password')
   @UsePipes(new ValidationPipe())
   forgotPassword(@Body() data: ForgotPasswordDTO) {
-    // log data
+    FileLogger.log({
+      method: 'POST',
+      data,
+    });
+    this.logger.log(`${JSON.stringify({ method: 'POST', data })}`);
     return this.userService.forgotPassword(data);
   }
 }
