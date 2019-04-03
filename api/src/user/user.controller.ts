@@ -1,14 +1,15 @@
 import { Controller, Post, Body, UsePipes, Logger, Get, UseGuards, Req } from '@nestjs/common';
 import { Request } from 'express';
 
+import { UserService } from './user.service';
+import { AuthGuard } from 'src/shared/auth.guard';
 import { FileLogger } from 'src/shared/file-logger.service';
 import { ValidationPipe } from 'src/shared/validation.pipe';
-import { UserService } from './user.service';
+import { User } from 'src/decorators/user.decorator';
 import { LoginDTO } from 'src/dto/login.dto';
 import { SignupDTO } from 'src/dto/signup.dto';
-import { AuthGuard } from 'src/shared/auth.guard';
 import { ChangePasswordDTO } from 'src/dto/change-password.dto';
-import { User } from 'src/decorators/user.decorator';
+import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
 
 @Controller(`${process.env.BASE_PATH}/auth`)
 export class UserController {
@@ -59,7 +60,9 @@ export class UserController {
   }
 
   @Post('/forgot-password')
-  forgotPassword() {
-    //
+  @UsePipes(new ValidationPipe())
+  forgotPassword(@Body() data: ForgotPasswordDTO) {
+    // log data
+    return this.userService.forgotPassword(data);
   }
 }
