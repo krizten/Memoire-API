@@ -19,6 +19,8 @@ import { ChangePasswordDTO } from 'src/dto/change-password.dto';
 import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
 import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
 import { AccountDTO } from 'src/dto/account.dto';
+import { DeleteAccountDTO } from 'src/dto/delete-account.dto';
+import { EntryEntity } from 'src/entry/entry.entity';
 
 config();
 
@@ -29,6 +31,8 @@ export class UserService {
     private userRepository: Repository<UserEntity>,
     @InjectRepository(LogoutTokenEntity)
     private logoutTokenRepository: Repository<LogoutTokenEntity>,
+    @InjectRepository(EntryEntity)
+    private entryRepository: Repository<EntryEntity>,
   ) {}
 
   // get token
@@ -246,7 +250,10 @@ export class UserService {
     );
   }
 
-  async resetPassword(token: string, data: ResetPasswordDTO): Promise<IResponse> {
+  async resetPassword(
+    token: string,
+    data: ResetPasswordDTO,
+  ): Promise<IResponse> {
     await this.confirmToken(token);
 
     const user: any = await this.verifyToken(token);
@@ -273,13 +280,47 @@ export class UserService {
     return this.responseFormat('Password reset was successful');
   }
 
-  async updateAccount(userId: string, data: Partial<AccountDTO>): Promise<IResponse> {
-    let user = await this.userRepository.findOne({ where: { id: userId }});
+  async updateAccount(
+    userId: string,
+    data: Partial<AccountDTO>,
+  ): Promise<IResponse> {
+    let user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
     }
     await this.userRepository.update({ id: userId }, data);
-    user = await this.userRepository.findOne({ where: { id: userId }});
+    user = await this.userRepository.findOne({ where: { id: userId } });
     return this.responseFormat('User details updated successfully.', user);
+  }
+
+  async deleteAccount(
+    request: Request,
+    userId: string,
+    data: DeleteAccountDTO,
+  ) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+
+    const { password } = data;
+    const passwordMatch = await this.checkPassword(password, user.password);
+    if (!passwordMatch) {
+      throw new HttpException('Password is incorrect', HttpStatus.BAD_REQUEST);
+    }
+
+    await this.entryRepository.delete({ author: user });
+    await this.userRepository.delete({ id: userId });
+
+    const bearerToken: any = request.headers.authorization.split(' ')[1];
+
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(LogoutTokenEntity)
+      .values({ token: bearerToken })
+      .execute();
+
+    return this.responseFormat('Account deleted successfully');
   }
 }
