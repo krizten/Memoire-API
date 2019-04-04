@@ -1,4 +1,16 @@
-import { Controller, Post, Body, UsePipes, Logger, Get, UseGuards, Req, Query, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UsePipes,
+  Logger,
+  Get,
+  UseGuards,
+  Req,
+  Query,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { Request } from 'express';
 
 import { UserService } from './user.service';
@@ -12,10 +24,10 @@ import { ChangePasswordDTO } from 'src/dto/change-password.dto';
 import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
 import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
 import { AccountDTO } from 'src/dto/account.dto';
+import { DeleteAccountDTO } from 'src/dto/delete-account.dto';
 
 @Controller(`${process.env.BASE_PATH}/auth`)
 export class UserController {
-
   constructor(private userService: UserService) {}
 
   private logger = new Logger('UserController');
@@ -51,7 +63,11 @@ export class UserController {
   @Post('/change-password')
   @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())
-  changePassword(@Req() request: Request, @User('id') user: string, @Body() data: ChangePasswordDTO) {
+  changePassword(
+    @Req() request: Request,
+    @User('id') user: string,
+    @Body() data: ChangePasswordDTO,
+  ) {
     FileLogger.log({
       method: 'POST',
       user,
@@ -95,5 +111,21 @@ export class UserController {
     });
     this.logger.log(`${JSON.stringify({ method: 'POST', user, data })}`);
     return this.userService.updateAccount(user, data);
+  }
+
+  @Delete('/account')
+  @UseGuards(new AuthGuard())
+  @UsePipes(new ValidationPipe())
+  deleteAccount(
+    @Req() request: Request,
+    @User('id') user: string,
+    @Body() data: DeleteAccountDTO,
+  ) {
+    FileLogger.log({
+      method: 'PUT',
+      user,
+    });
+    this.logger.log(`${JSON.stringify({ method: 'POST', user })}`);
+    return this.userService.deleteAccount(request, user, data);
   }
 }
