@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UsePipes, Logger, Get, UseGuards, Req, Query } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes, Logger, Get, UseGuards, Req, Query, Put } from '@nestjs/common';
 import { Request } from 'express';
 
 import { UserService } from './user.service';
@@ -11,6 +11,7 @@ import { SignupDTO } from 'src/dto/signup.dto';
 import { ChangePasswordDTO } from 'src/dto/change-password.dto';
 import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
 import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
+import { AccountDTO } from 'src/dto/account.dto';
 
 @Controller(`${process.env.BASE_PATH}/auth`)
 export class UserController {
@@ -81,5 +82,18 @@ export class UserController {
     });
     this.logger.log(`${JSON.stringify({ method: 'POST', token, data })}`);
     return this.userService.resetPassword(token, data);
+  }
+
+  @Put('/account')
+  @UseGuards(new AuthGuard())
+  @UsePipes(new ValidationPipe())
+  updateAccount(@User('id') user: string, @Body() data: Partial<AccountDTO>) {
+    FileLogger.log({
+      method: 'PUT',
+      user,
+      data,
+    });
+    this.logger.log(`${JSON.stringify({ method: 'POST', user, data })}`);
+    return this.userService.updateAccount(user, data);
   }
 }

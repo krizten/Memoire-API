@@ -14,10 +14,11 @@ import { LoginDTO } from 'src/dto/login.dto';
 import { SignupDTO } from 'src/dto/signup.dto';
 import { LogoutTokenEntity } from './logout-token.entity';
 import { ResetTokenEntity } from './reset-token.entity';
+import { resetPasswordTemplate } from './reset-pwd-template';
 import { ChangePasswordDTO } from 'src/dto/change-password.dto';
 import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
-import { resetPasswordTemplate } from './reset-pwd-template';
 import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
+import { AccountDTO } from 'src/dto/account.dto';
 
 config();
 
@@ -245,7 +246,7 @@ export class UserService {
     );
   }
 
-  async resetPassword(token: string, data: ResetPasswordDTO) {
+  async resetPassword(token: string, data: ResetPasswordDTO): Promise<IResponse> {
     await this.confirmToken(token);
 
     const user: any = await this.verifyToken(token);
@@ -270,5 +271,15 @@ export class UserService {
       .execute();
 
     return this.responseFormat('Password reset was successful');
+  }
+
+  async updateAccount(userId: string, data: Partial<AccountDTO>): Promise<IResponse> {
+    let user = await this.userRepository.findOne({ where: { id: userId }});
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+    await this.userRepository.update({ id: userId }, data);
+    user = await this.userRepository.findOne({ where: { id: userId }});
+    return this.responseFormat('User details updated successfully.', user);
   }
 }
