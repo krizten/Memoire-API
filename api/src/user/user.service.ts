@@ -5,13 +5,19 @@ import { Repository, getConnection } from 'typeorm';
 import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
+import * as sendGrid from '@sendgrid/mail';
+import { MailData } from '@sendgrid/helpers/classes/mail';
 
 import { UserEntity } from './user.entity';
 import { IResponse } from 'src/interfaces/response.interface';
 import { LoginDTO } from 'src/dto/login.dto';
 import { SignupDTO } from 'src/dto/signup.dto';
-import { InvalidatedTokenEntity } from './token.entity';
+import { LogoutTokenEntity } from './logout-token.entity';
+import { ResetTokenEntity } from './reset-token.entity';
 import { ChangePasswordDTO } from 'src/dto/change-password.dto';
+import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
+import { resetPasswordTemplate } from './reset-pwd-template';
+import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
 
 config();
 
@@ -20,18 +26,58 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
-    @InjectRepository(InvalidatedTokenEntity)
-    private tokenRepository: Repository<InvalidatedTokenEntity>,
+    @InjectRepository(LogoutTokenEntity)
+    private logoutTokenRepository: Repository<LogoutTokenEntity>,
   ) {}
 
   // get token
-  private token(id: string, email: string): string {
-    return jwt.sign({ id, email }, process.env.SECRET, { expiresIn: '7d' });
+  private token(id: string, email: string, duration: string): string {
+    return jwt.sign({ id, email }, process.env.SECRET, { expiresIn: duration });
   }
 
   // confirm password
   private async checkPassword(attempt: string, hash: string): Promise<boolean> {
     return await bcrypt.compare(attempt, hash);
+  }
+
+  private async verifyToken(token: string): Promise<string | object> {
+    try {
+      const decodedToken = await jwt.verify(token, process.env.SECRET);
+      return decodedToken;
+    } catch (error) {
+      const message = `Token error: ${error.message || error.name}`;
+      throw new HttpException(message, HttpStatus.FORBIDDEN);
+    }
+  }
+
+  private async confirmToken(token: string): Promise<void> {
+    const resetToken = await getConnection()
+      .createQueryBuilder()
+      .select('token')
+      .from(ResetTokenEntity, 'token')
+      .where('token.token = :token', { token })
+      .getOne();
+
+    if (!resetToken) {
+      throw new HttpException(
+        'Invalid Token: reset password token is invalid.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const usedToken = await getConnection()
+      .createQueryBuilder()
+      .select('token')
+      .from(LogoutTokenEntity, 'token')
+      .where('token.token = :token', { token })
+      .getOne();
+
+    if (usedToken) {
+      throw new HttpException(
+        'Invalid Token: token has been used for a previous password reset.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   // format response to standard in specfications
@@ -43,7 +89,7 @@ export class UserService {
   ): IResponse {
     if (user) {
       const { id, created, email } = user;
-      const token = this.token(id, email);
+      const token = this.token(id, email, '7d');
       let data = { id, created, email };
       if (showToken) {
         data = { ...data, ...{ token } };
@@ -94,7 +140,7 @@ export class UserService {
   async logout(request: Request): Promise<IResponse> {
     const bearerToken: any = request.headers.authorization.split(' ')[1];
 
-    const token = await this.tokenRepository.findOne({
+    const token = await this.logoutTokenRepository.findOne({
       where: { token: bearerToken },
     });
     if (token) {
@@ -107,7 +153,7 @@ export class UserService {
     await getConnection()
       .createQueryBuilder()
       .insert()
-      .into(InvalidatedTokenEntity)
+      .into(LogoutTokenEntity)
       .values({ token: bearerToken })
       .execute();
     return this.responseFormat('Logout successful');
@@ -117,7 +163,7 @@ export class UserService {
     request: Request,
     userId: string,
     data: ChangePasswordDTO,
-  ) {
+  ): Promise<IResponse> {
     const bearerToken: any = request.headers.authorization.split(' ')[1];
     const { currentPassword, newPassword, confirmPassword } = data;
     const user = await this.userRepository.findOne({ where: { id: userId } });
@@ -158,10 +204,71 @@ export class UserService {
     await getConnection()
       .createQueryBuilder()
       .insert()
-      .into(InvalidatedTokenEntity)
+      .into(LogoutTokenEntity)
       .values({ token: bearerToken })
       .execute();
 
     return this.responseFormat('Password changed successfully');
+  }
+
+  async forgotPassword(data: ForgotPasswordDTO): Promise<IResponse> {
+    const { email } = data;
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new HttpException('Email does not exist', HttpStatus.BAD_REQUEST);
+    }
+    const { id } = user;
+    const token = this.token(id, email, '24h');
+
+    const host = process.env.HOST || '127.0.0.1';
+    const port = process.env.PORT || 8080;
+
+    // add token to reset-token table
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(ResetTokenEntity)
+      .values({ token })
+      .execute();
+
+    sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
+    const message: MailData = {
+      to: email,
+      from: 'no-reply@memoireapp.com',
+      subject: `Hi, ${user.name}! Having Trouble Signing In? 😊`,
+      html: resetPasswordTemplate(host, port, token),
+    };
+    await sendGrid.send(message);
+
+    return this.responseFormat(
+      'Password reset email has been sent to the user',
+    );
+  }
+
+  async resetPassword(token: string, data: ResetPasswordDTO) {
+    await this.confirmToken(token);
+
+    const user: any = await this.verifyToken(token);
+    const { newPassword, confirmPassword } = data;
+
+    if (newPassword !== confirmPassword) {
+      throw new HttpException(
+        'New password and confirm password do not match',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const { id } = user;
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.userRepository.update({ id }, { password: hashedPassword });
+
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(LogoutTokenEntity)
+      .values({ token })
+      .execute();
+
+    return this.responseFormat('Password reset was successful');
   }
 }

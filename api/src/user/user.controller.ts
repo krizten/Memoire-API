@@ -1,14 +1,16 @@
-import { Controller, Post, Body, UsePipes, Logger, Get, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes, Logger, Get, UseGuards, Req, Query } from '@nestjs/common';
 import { Request } from 'express';
 
+import { UserService } from './user.service';
+import { AuthGuard } from 'src/shared/auth.guard';
 import { FileLogger } from 'src/shared/file-logger.service';
 import { ValidationPipe } from 'src/shared/validation.pipe';
-import { UserService } from './user.service';
+import { User } from 'src/decorators/user.decorator';
 import { LoginDTO } from 'src/dto/login.dto';
 import { SignupDTO } from 'src/dto/signup.dto';
-import { AuthGuard } from 'src/shared/auth.guard';
 import { ChangePasswordDTO } from 'src/dto/change-password.dto';
-import { User } from 'src/decorators/user.decorator';
+import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
+import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
 
 @Controller(`${process.env.BASE_PATH}/auth`)
 export class UserController {
@@ -56,5 +58,28 @@ export class UserController {
     });
     this.logger.log(`${JSON.stringify({ method: 'POST', user, data })}`);
     return this.userService.changePassword(request, user, data);
+  }
+
+  @Post('/forgot-password')
+  @UsePipes(new ValidationPipe())
+  forgotPassword(@Body() data: ForgotPasswordDTO) {
+    FileLogger.log({
+      method: 'POST',
+      data,
+    });
+    this.logger.log(`${JSON.stringify({ method: 'POST', data })}`);
+    return this.userService.forgotPassword(data);
+  }
+
+  @Post('/reset-password')
+  @UsePipes(new ValidationPipe())
+  resetPassword(@Query('key') token: string, @Body() data: ResetPasswordDTO) {
+    FileLogger.log({
+      method: 'POST',
+      token,
+      data,
+    });
+    this.logger.log(`${JSON.stringify({ method: 'POST', token, data })}`);
+    return this.userService.resetPassword(token, data);
   }
 }

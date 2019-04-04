@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('token')
-export class InvalidatedTokenEntity {
+@Entity('logout_token')
+export class LogoutTokenEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

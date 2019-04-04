@@ -8,7 +8,7 @@ import {
 import { getConnection } from 'typeorm';
 import { config } from 'dotenv';
 import * as jwt from 'jsonwebtoken';
-import { InvalidatedTokenEntity } from 'src/user/token.entity';
+import { LogoutTokenEntity } from 'src/user/logout-token.entity';
 
 config();
 
@@ -38,7 +38,7 @@ export class AuthGuard implements CanActivate {
     const loggedOutToken = await getConnection()
       .createQueryBuilder()
       .select('token')
-      .from(InvalidatedTokenEntity, 'token')
+      .from(LogoutTokenEntity, 'token')
       .where('token.token = :token', { token })
       .getOne();
 
