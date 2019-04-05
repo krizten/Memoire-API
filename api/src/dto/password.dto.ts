@@ -1,6 +1,6 @@
 import { MinLength, IsNotEmpty } from 'class-validator';
 
-export class DeleteAccountDTO {
+export class PasswordDTO {
   @MinLength(6)
   @IsNotEmpty()
   password: string;

@@ -1,11 +1,13 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 
 import { EntryEntity } from './entry.entity';
 import { EntryDTO } from 'src/dto/entry.dto';
 import { IResponse } from 'src/interfaces/response.interface';
 import { UserEntity } from 'src/user/user.entity';
+import { PasswordDTO } from 'src/dto/password.dto';
 
 @Injectable()
 export class EntryService {
@@ -135,5 +137,22 @@ export class EntryService {
     this.confirmAuthorship(userId, entry);
     await this.entryRepository.delete({ id });
     return this.responseFormat('Entry deleted successfully');
+  }
+
+  async deleteAll(userId: string, data: PasswordDTO) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+
+    const { password } = data;
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      throw new HttpException('Password is incorrect', HttpStatus.BAD_REQUEST);
+    }
+
+    await this.entryRepository.delete({ author: user });
+
+    return this.responseFormat('All entries deleted successfully');
   }
 }

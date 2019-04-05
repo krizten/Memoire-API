@@ -24,7 +24,7 @@ import { ChangePasswordDTO } from 'src/dto/change-password.dto';
 import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
 import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
 import { AccountDTO } from 'src/dto/account.dto';
-import { DeleteAccountDTO } from 'src/dto/delete-account.dto';
+import { PasswordDTO } from 'src/dto/password.dto';
 
 @Controller(`${process.env.BASE_PATH}/auth`)
 export class UserController {
@@ -125,7 +125,7 @@ export class UserController {
   deleteAccount(
     @Req() request: Request,
     @User('id') user: string,
-    @Body() data: DeleteAccountDTO,
+    @Body() data: PasswordDTO,
   ) {
     FileLogger.log({
       method: 'PUT',

@@ -18,6 +18,7 @@ import { EntryDTO } from 'src/dto/entry.dto';
 import { ValidationPipe } from 'src/shared/validation.pipe';
 import { AuthGuard } from 'src/shared/auth.guard';
 import { User } from 'src/decorators/user.decorator';
+import { PasswordDTO } from 'src/dto/password.dto';
 
 config();
 
@@ -72,5 +73,16 @@ export class EntryController {
     });
     this.logger.log(`${JSON.stringify({ method: 'DELETE', user, id })}`);
     return this.entryService.delete(user, id);
+  }
+
+  @Delete()
+  @UsePipes(new ValidationPipe())
+  clearEntries(@User('id') user: string, @Body() data: PasswordDTO) {
+    FileLogger.log({
+      method: 'DELETE',
+      user,
+    });
+    this.logger.log(`${JSON.stringify({ method: 'DELETE', user })}`);
+    return this.entryService.deleteAll(user, data);
   }
 }
