@@ -100,6 +100,12 @@ export class UserController {
     return this.userService.resetPassword(token, data);
   }
 
+  @Get('/account')
+  @UseGuards(new AuthGuard())
+  getAccount(@User('id') user: string) {
+    return this.userService.getAccount(user);
+  }
+
   @Put('/account')
   @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())

@@ -24,6 +24,14 @@ import { EntryEntity } from 'src/entry/entry.entity';
 
 config();
 
+interface ResponseOptions {
+  summary: string;
+  user?: UserEntity;
+  status?: number;
+  showToken?: boolean;
+  account?: boolean;
+}
+
 @Injectable()
 export class UserService {
   constructor(
@@ -86,19 +94,27 @@ export class UserService {
   }
 
   // format response to standard in specfications
-  private responseFormat(
-    summary: string,
-    user?: UserEntity,
-    status: number = HttpStatus.OK,
-    showToken: boolean = false,
-  ): IResponse {
+  private responseFormat({
+    summary,
+    user,
+    status = HttpStatus.OK,
+    showToken = false,
+    account = false,
+  }: ResponseOptions): IResponse {
+
     if (user) {
-      const { id, created, email } = user;
+      const { id, created, email, avatar, bio, gender, dateOfBirth, entries, name } = user;
       const token = this.token(id, email, '7d');
-      let data = { id, created, email };
+      let data: any = { id, created, email };
+
       if (showToken) {
         data = { ...data, ...{ token } };
       }
+
+      if (account) {
+        data = { name, email, dateOfBirth, gender, avatar, bio, entriesTillDate: entries.length };
+      }
+
       return {
         summary,
         success: true,
@@ -106,6 +122,7 @@ export class UserService {
         data,
       };
     }
+
     return {
       summary,
       success: true,
@@ -121,12 +138,12 @@ export class UserService {
     }
     user = await this.userRepository.create(data);
     await this.userRepository.save(user);
-    return this.responseFormat(
-      'Signup successful',
+    return this.responseFormat({
+      summary: 'Signup successful',
       user,
-      HttpStatus.CREATED,
-      true,
-    );
+      status: HttpStatus.CREATED,
+      showToken: true,
+    });
   }
 
   async login(data: LoginDTO): Promise<IResponse> {
@@ -139,7 +156,11 @@ export class UserService {
     if (!passwordMatch) {
       throw new HttpException('Password is incorrect', HttpStatus.BAD_REQUEST);
     }
-    return this.responseFormat('Login successful', user, HttpStatus.OK, true);
+    return this.responseFormat({
+      summary: 'Login successful',
+      user,
+      showToken: true,
+    });
   }
 
   async logout(request: Request): Promise<IResponse> {
@@ -161,7 +182,9 @@ export class UserService {
       .into(LogoutTokenEntity)
       .values({ token: bearerToken })
       .execute();
-    return this.responseFormat('Logout successful');
+    return this.responseFormat({
+      summary: 'Logout successful',
+    });
   }
 
   async changePassword(
@@ -213,7 +236,7 @@ export class UserService {
       .values({ token: bearerToken })
       .execute();
 
-    return this.responseFormat('Password changed successfully');
+    return this.responseFormat({ summary: 'Password changed successfully' });
   }
 
   async forgotPassword(data: ForgotPasswordDTO): Promise<IResponse> {
@@ -245,9 +268,9 @@ export class UserService {
     };
     await sendGrid.send(message);
 
-    return this.responseFormat(
-      'Password reset email has been sent to the user',
-    );
+    return this.responseFormat({
+      summary: 'Password reset email has been sent to the user',
+    });
   }
 
   async resetPassword(
@@ -277,27 +300,49 @@ export class UserService {
       .values({ token })
       .execute();
 
-    return this.responseFormat('Password reset was successful');
+    return this.responseFormat({ summary: 'Password reset was successful' });
+  }
+
+  async getAccount(userId: string) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['entries'],
+    });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+    return this.responseFormat({
+      summary: 'Request was successful.',
+      user,
+      account: true,
+    });
   }
 
   async updateAccount(
     userId: string,
     data: Partial<AccountDTO>,
   ): Promise<IResponse> {
-    let user = await this.userRepository.findOne({ where: { id: userId } });
+    let user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['entries'],
+    });
     if (!user) {
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
     }
     await this.userRepository.update({ id: userId }, data);
     user = await this.userRepository.findOne({ where: { id: userId } });
-    return this.responseFormat('User details updated successfully.', user);
+    return this.responseFormat({
+      summary: 'User details updated successfully.',
+      user,
+      account: true,
+    });
   }
 
   async deleteAccount(
     request: Request,
     userId: string,
     data: DeleteAccountDTO,
-  ) {
+  ): Promise<IResponse> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
@@ -321,6 +366,6 @@ export class UserService {
       .values({ token: bearerToken })
       .execute();
 
-    return this.responseFormat('Account deleted successfully');
+    return this.responseFormat({ summary: 'Account deleted successfully' });
   }
 }
