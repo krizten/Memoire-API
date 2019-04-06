@@ -19,7 +19,7 @@ import { ChangePasswordDTO } from 'src/dto/change-password.dto';
 import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
 import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
 import { AccountDTO } from 'src/dto/account.dto';
-import { DeleteAccountDTO } from 'src/dto/delete-account.dto';
+import { PasswordDTO } from 'src/dto/password.dto';
 import { EntryEntity } from 'src/entry/entry.entity';
 
 config();
@@ -341,7 +341,7 @@ export class UserService {
   async deleteAccount(
     request: Request,
     userId: string,
-    data: DeleteAccountDTO,
+    data: PasswordDTO,
   ): Promise<IResponse> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
