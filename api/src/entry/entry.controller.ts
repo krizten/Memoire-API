@@ -64,17 +64,6 @@ export class EntryController {
     return this.entryService.edit(user, id, data);
   }
 
-  @Delete(':id')
-  deleteEntry(@User('id') user: string, @Param('id') id: string) {
-    FileLogger.log({
-      method: 'DELETE',
-      user,
-      id,
-    });
-    this.logger.log(`${JSON.stringify({ method: 'DELETE', user, id })}`);
-    return this.entryService.delete(user, id);
-  }
-
   @Delete()
   @UsePipes(new ValidationPipe())
   clearEntries(@User('id') user: string, @Body() data: PasswordDTO) {
@@ -84,5 +73,16 @@ export class EntryController {
     });
     this.logger.log(`${JSON.stringify({ method: 'DELETE', user })}`);
     return this.entryService.deleteAll(user, data);
+  }
+
+  @Delete(':id')
+  deleteEntry(@User('id') user: string, @Param('id') id: string) {
+    FileLogger.log({
+      method: 'DELETE',
+      user,
+      id,
+    });
+    this.logger.log(`${JSON.stringify({ method: 'DELETE', user, id })}`);
+    return this.entryService.delete(user, id);
   }
 }

@@ -7,11 +7,17 @@ import { EntryModule } from './entry/entry.module';
 import { HttpExceptionFilter } from './shared/http-exception.filter';
 import { LoggingInterceptor } from './shared/logging.interceptor';
 import { UserModule } from './user/user.module';
+import { ImageModule } from './image/image.module';
 
 import configuration from './config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(configuration.db), EntryModule, UserModule],
+  imports: [
+    TypeOrmModule.forRoot(configuration.db),
+    EntryModule,
+    UserModule,
+    ImageModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
