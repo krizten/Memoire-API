@@ -20,4 +20,9 @@ export class ImageController {
   imageUpload(@Req() request: any, @Res() response: any) {
     this.imageService.imageUpload(request, response);
   }
+
+  @Post('/avatar')
+  avatarUpload(@Req() request: any, @Res() response: any) {
+    this.imageService.avatarUpload(request, response);
+  }
 }
