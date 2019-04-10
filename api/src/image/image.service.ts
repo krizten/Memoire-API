@@ -98,4 +98,8 @@ export class ImageService {
   async imageUpload(request: any, response: any): Promise<any> {
     await this.baseUpload(request, response, 'image');
   }
+
+  async avatarUpload(request: any, response: any): Promise<any> {
+    await this.baseUpload(request, response, 'avatar');
+  }
 }
