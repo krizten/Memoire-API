@@ -12,7 +12,7 @@ import { ImageService } from './image.service';
 config();
 
 @Controller(`${process.env.BASE_PATH}/uploads`)
-// @UseGuards(new AuthGuard())
+@UseGuards(new AuthGuard())
 export class ImageController {
   constructor(private imageService: ImageService) {}
 
