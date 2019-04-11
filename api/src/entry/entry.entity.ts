@@ -7,7 +7,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { ICoordinates } from 'src/interfaces/coordinates.interface';
-import { UserEntity } from 'src/user/user.entity';
+import { UserEntity } from 'src/auth/user.entity';
 import { GeoCoordinatesDTO } from 'src/dto/geo-coordinates.dto';
 
 @Entity('entries')

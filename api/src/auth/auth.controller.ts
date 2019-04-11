@@ -8,12 +8,11 @@ import {
   UseGuards,
   Req,
   Query,
-  Put,
-  Delete,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 
-import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 import { AuthGuard } from 'src/shared/auth.guard';
 import { FileLogger } from 'src/shared/file-logger.service';
 import { ValidationPipe } from 'src/shared/validation.pipe';
@@ -23,16 +22,13 @@ import { SignupDTO } from 'src/dto/signup.dto';
 import { ChangePasswordDTO } from 'src/dto/change-password.dto';
 import { EmailDTO } from 'src/dto/email.dto';
 import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
-import { AccountDTO } from 'src/dto/account.dto';
-import { PasswordDTO } from 'src/dto/password.dto';
-import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 
-@ApiUseTags('Auth')
+@ApiUseTags('Authentication')
 @Controller(`${process.env.BASE_PATH}/auth`)
-export class UserController {
-  constructor(private userService: UserService) {}
+export class AuthController {
+  constructor(private authService: AuthService) {}
 
-  private logger = new Logger('UserController');
+  private logger = new Logger('AuthController');
 
   @Post('/signup')
   @UsePipes(new ValidationPipe())
@@ -42,7 +38,7 @@ export class UserController {
       data,
     });
     this.logger.log(`${JSON.stringify({ method: 'POST', data })}`);
-    return this.userService.signup(data);
+    return this.authService.signup(data);
   }
 
   @Post('/login')
@@ -53,14 +49,14 @@ export class UserController {
       data,
     });
     this.logger.log(`${JSON.stringify({ method: 'POST', data })}`);
-    return this.userService.login(data);
+    return this.authService.login(data);
   }
 
   @ApiBearerAuth()
   @Get('/logout')
   @UseGuards(new AuthGuard())
   logout(@Req() request: Request) {
-    return this.userService.logout(request);
+    return this.authService.logout(request);
   }
 
   @ApiBearerAuth()
@@ -78,7 +74,7 @@ export class UserController {
       data,
     });
     this.logger.log(`${JSON.stringify({ method: 'POST', user, data })}`);
-    return this.userService.changePassword(request, user, data);
+    return this.authService.changePassword(request, user, data);
   }
 
   @Post('/forgot-password')
@@ -89,7 +85,7 @@ export class UserController {
       data,
     });
     this.logger.log(`${JSON.stringify({ method: 'POST', data })}`);
-    return this.userService.forgotPassword(data);
+    return this.authService.forgotPassword(data);
   }
 
   @Post('/reset-password')
@@ -101,44 +97,6 @@ export class UserController {
       data,
     });
     this.logger.log(`${JSON.stringify({ method: 'POST', token, data })}`);
-    return this.userService.resetPassword(token, data);
-  }
-
-  @ApiBearerAuth()
-  @Get('/account')
-  @UseGuards(new AuthGuard())
-  getAccount(@User('id') user: string) {
-    return this.userService.getAccount(user);
-  }
-
-  @ApiBearerAuth()
-  @Put('/account')
-  @UseGuards(new AuthGuard())
-  @UsePipes(new ValidationPipe())
-  updateAccount(@User('id') user: string, @Body() data: Partial<AccountDTO>) {
-    FileLogger.log({
-      method: 'PUT',
-      user,
-      data,
-    });
-    this.logger.log(`${JSON.stringify({ method: 'POST', user, data })}`);
-    return this.userService.updateAccount(user, data);
-  }
-
-  @ApiBearerAuth()
-  @Delete('/account')
-  @UseGuards(new AuthGuard())
-  @UsePipes(new ValidationPipe())
-  deleteAccount(
-    @Req() request: Request,
-    @User('id') user: string,
-    @Body() data: PasswordDTO,
-  ) {
-    FileLogger.log({
-      method: 'PUT',
-      user,
-    });
-    this.logger.log(`${JSON.stringify({ method: 'POST', user })}`);
-    return this.userService.deleteAccount(request, user, data);
+    return this.authService.resetPassword(token, data);
   }
 }
