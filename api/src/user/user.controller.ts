@@ -21,11 +21,13 @@ import { User } from 'src/decorators/user.decorator';
 import { LoginDTO } from 'src/dto/login.dto';
 import { SignupDTO } from 'src/dto/signup.dto';
 import { ChangePasswordDTO } from 'src/dto/change-password.dto';
-import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
+import { EmailDTO } from 'src/dto/email.dto';
 import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
 import { AccountDTO } from 'src/dto/account.dto';
 import { PasswordDTO } from 'src/dto/password.dto';
+import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiUseTags('Auth')
 @Controller(`${process.env.BASE_PATH}/auth`)
 export class UserController {
   constructor(private userService: UserService) {}
@@ -54,12 +56,14 @@ export class UserController {
     return this.userService.login(data);
   }
 
+  @ApiBearerAuth()
   @Get('/logout')
   @UseGuards(new AuthGuard())
   logout(@Req() request: Request) {
     return this.userService.logout(request);
   }
 
+  @ApiBearerAuth()
   @Post('/change-password')
   @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())
@@ -79,7 +83,7 @@ export class UserController {
 
   @Post('/forgot-password')
   @UsePipes(new ValidationPipe())
-  forgotPassword(@Body() data: ForgotPasswordDTO) {
+  forgotPassword(@Body() data: EmailDTO) {
     FileLogger.log({
       method: 'POST',
       data,
@@ -100,12 +104,14 @@ export class UserController {
     return this.userService.resetPassword(token, data);
   }
 
+  @ApiBearerAuth()
   @Get('/account')
   @UseGuards(new AuthGuard())
   getAccount(@User('id') user: string) {
     return this.userService.getAccount(user);
   }
 
+  @ApiBearerAuth()
   @Put('/account')
   @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())
@@ -119,6 +125,7 @@ export class UserController {
     return this.userService.updateAccount(user, data);
   }
 
+  @ApiBearerAuth()
   @Delete('/account')
   @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())

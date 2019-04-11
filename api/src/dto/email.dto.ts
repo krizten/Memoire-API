@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
-export class ForgotPasswordDTO {
+export class EmailDTO {
 
   @IsEmail()
   @IsNotEmpty()

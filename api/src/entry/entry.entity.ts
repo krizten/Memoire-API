@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { ICoordinates } from 'src/interfaces/coordinates.interface';
 import { UserEntity } from 'src/user/user.entity';
+import { GeoCoordinatesDTO } from 'src/dto/geo-coordinates.dto';
 
 @Entity('entries')
 export class EntryEntity {
@@ -30,7 +31,7 @@ export class EntryEntity {
   image: string;
 
   @Column('json', { nullable: true })
-  geolocation: ICoordinates;
+  geolocation: GeoCoordinatesDTO;
 
   @ManyToOne(type => UserEntity, author => author.entries)
   author: UserEntity;

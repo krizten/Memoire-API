@@ -16,7 +16,7 @@ import { LogoutTokenEntity } from './logout-token.entity';
 import { ResetTokenEntity } from './reset-token.entity';
 import { resetPasswordTemplate } from './reset-pwd-template';
 import { ChangePasswordDTO } from 'src/dto/change-password.dto';
-import { ForgotPasswordDTO } from 'src/dto/forgot-password.dto';
+import { EmailDTO } from 'src/dto/email.dto';
 import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
 import { AccountDTO } from 'src/dto/account.dto';
 import { PasswordDTO } from 'src/dto/password.dto';
@@ -239,7 +239,7 @@ export class UserService {
     return this.responseFormat({ summary: 'Password changed successfully' });
   }
 
-  async forgotPassword(data: ForgotPasswordDTO): Promise<IResponse> {
+  async forgotPassword(data: EmailDTO): Promise<IResponse> {
     const { email } = data;
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user) {
