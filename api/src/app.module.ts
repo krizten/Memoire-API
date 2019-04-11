@@ -7,7 +7,7 @@ import { EntryModule } from './entry/entry.module';
 import { HttpExceptionFilter } from './shared/http-exception.filter';
 import { LoggingInterceptor } from './shared/logging.interceptor';
 import { UserModule } from './user/user.module';
-import { ImageModule } from './image/image.module';
+import { UploadModule } from './upload/upload.module';
 
 import configuration from './config';
 
@@ -15,8 +15,8 @@ import configuration from './config';
   imports: [
     TypeOrmModule.forRoot(configuration.db),
     EntryModule,
+    UploadModule,
     UserModule,
-    ImageModule,
   ],
   controllers: [AppController],
   providers: [

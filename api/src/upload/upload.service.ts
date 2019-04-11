@@ -15,7 +15,7 @@ const fileFilter = (req: any, file: any, cb: any) => {
 };
 
 @Injectable()
-export class ImageService {
+export class UploadService {
   private s3 = new AWS.S3();
 
   private upload = multer({
