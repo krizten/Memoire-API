@@ -14,13 +14,15 @@ async function bootstrap() {
 
   const options = new DocumentBuilder()
     .setTitle('Memoire REST API')
-    .setDescription('Endpoints on Memoire REST API')
+    .setDescription(
+      'REST API endpoints documentation for Memoire app. Memoire is an online journal where users can pen down their thoughts and feelings.',
+    )
     .setVersion('1.0')
     .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('apidocs', app, document);
+  SwaggerModule.setup('api-docs', app, document);
 
   await app.listen(port);
   const startupMsg = `Server is running on http://${host}:${port}`;
