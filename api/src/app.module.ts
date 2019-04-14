@@ -6,17 +6,19 @@ import { AppService } from './app.service';
 import { EntryModule } from './entry/entry.module';
 import { HttpExceptionFilter } from './shared/http-exception.filter';
 import { LoggingInterceptor } from './shared/logging.interceptor';
-import { UserModule } from './user/user.module';
-import { ImageModule } from './image/image.module';
+import { AuthModule } from './auth/auth.module';
+import { UploadModule } from './upload/upload.module';
+import { AccountModule } from './account/account.module';
 
 import configuration from './config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(configuration.db),
+    AuthModule,
     EntryModule,
-    UserModule,
-    ImageModule,
+    AccountModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [

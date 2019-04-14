@@ -11,17 +11,31 @@ import {
   UsePipes,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiUseTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiOkResponse,
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+  ApiBadRequestResponse,
+  ApiNotFoundResponse,
+  ApiCreatedResponse,
+  ApiImplicitBody,
+} from '@nestjs/swagger';
 
+import { AuthGuard } from 'src/shared/auth.guard';
+import { ValidationPipe } from 'src/shared/validation.pipe';
+import { User } from 'src/decorators/user.decorator';
 import { FileLogger } from 'src/shared/file-logger.service';
 import { EntryService } from './entry.service';
 import { EntryDTO } from 'src/dto/entry.dto';
-import { ValidationPipe } from 'src/shared/validation.pipe';
-import { AuthGuard } from 'src/shared/auth.guard';
-import { User } from 'src/decorators/user.decorator';
 import { PasswordDTO } from 'src/dto/password.dto';
 
 config();
 
+@ApiUseTags('Entries')
+@ApiBearerAuth()
 @Controller(`${process.env.BASE_PATH}/entries`)
 @UseGuards(new AuthGuard())
 export class EntryController {
@@ -30,16 +44,37 @@ export class EntryController {
   private logger = new Logger('EntryController');
 
   @Get()
+  /***** Swagger API Doc Start *****/
+  @ApiOperation({ title: 'Get All Entries', description: 'Retrieve all diary entries created by the user' })
+  @ApiOkResponse({ description: 'Entries retrieved successfully' })
+  @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  /***** Swagger API Doc End *****/
   getAllEntries(@User('id') user: string) {
     return this.entryService.getAll(user);
   }
 
   @Get(':id')
+  /***** Swagger API Doc Start *****/
+  @ApiOperation({ title: 'Get Single Entry', description: 'Retrieve entry matching the supplied ID' })
+  @ApiOkResponse({ description: 'Entry matching ID retrieved successfully' })
+  @ApiBadRequestResponse({ description: 'Invalid entry ID' })
+  @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
+  @ApiNotFoundResponse({description: 'Entry not found' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  /***** Swagger API Doc End *****/
   getEntry(@User('id') user: string, @Param('id') id: string) {
     return this.entryService.getOne(user, id);
   }
 
   @Post()
+  /***** Swagger API Doc Start *****/
+  @ApiOperation({ title: 'Add New Entry', description: 'Create a new diary entry' })
+  @ApiCreatedResponse({ description: 'Entry created successfully' })
+  @ApiBadRequestResponse({ description: 'Error in request headers or body' })
+  @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  /***** Swagger API Doc End *****/
   @UsePipes(new ValidationPipe())
   addEntry(@User('id') user: string, @Body() data: EntryDTO) {
     FileLogger.log({
@@ -52,9 +87,18 @@ export class EntryController {
   }
 
   @Put(':id')
+  /***** Swagger API Doc Start *****/
+  @ApiImplicitBody({ name: 'EntryDTO', type: EntryDTO })
+  @ApiOperation({ title: 'Update Existing Entry', description: 'Update an existing diary entry matching the supplied entry ID' })
+  @ApiOkResponse({ description: 'Entry updated successfully' })
+  @ApiBadRequestResponse({ description: 'Error in request headers or body' })
+  @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
+  @ApiNotFoundResponse({description: 'Entry not found' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  /***** Swagger API Doc End *****/
   @UsePipes(new ValidationPipe())
   editEntry(@User('id') user: string, @Param('id') id: string, @Body() data: Partial<EntryDTO>) {
-    FileLogger.log({
+    FileLogger.log({/***** Swagger API Doc Start *****/
       method: 'PUT',
       user,
       id,
@@ -65,6 +109,13 @@ export class EntryController {
   }
 
   @Delete()
+  /***** Swagger API Doc Start *****/
+  @ApiOperation({ title: 'Delete All Entries', description: 'Delete all diary entries created by the user' })
+  @ApiOkResponse({ description: 'Entries deleted successfully' })
+  @ApiBadRequestResponse({ description: 'Error in request headers or body' })
+  @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  /***** Swagger API Doc End *****/
   @UsePipes(new ValidationPipe())
   clearEntries(@User('id') user: string, @Body() data: PasswordDTO) {
     FileLogger.log({
@@ -76,6 +127,14 @@ export class EntryController {
   }
 
   @Delete(':id')
+  /***** Swagger API Doc Start *****/
+  @ApiOperation({ title: 'Delete Single Entry', description: 'Delete entry matching the supplied ID' })
+  @ApiOkResponse({ description: 'Entry matching ID deleted successfully' })
+  @ApiBadRequestResponse({ description: 'Invalid entry ID' })
+  @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
+  @ApiNotFoundResponse({description: 'Entry not found' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  /***** Swagger API Doc End *****/
   deleteEntry(@User('id') user: string, @Param('id') id: string) {
     FileLogger.log({
       method: 'DELETE',
