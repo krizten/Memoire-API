@@ -9,6 +9,7 @@ import { getConnection } from 'typeorm';
 import { config } from 'dotenv';
 import * as jwt from 'jsonwebtoken';
 import { LogoutTokenEntity } from 'src/auth/logout-token.entity';
+import { ResetTokenEntity } from 'src/auth/reset-token.entity';
 
 config();
 
@@ -47,6 +48,18 @@ export class AuthGuard implements CanActivate {
         'Invalid Token: token has been invalidated on logout.',
         HttpStatus.BAD_REQUEST,
       );
+    }
+
+    // check if token is a reset token
+    const resetToken = await getConnection()
+      .createQueryBuilder()
+      .select('token')
+      .from(ResetTokenEntity, 'token')
+      .where('token.token = :token', { token })
+      .getOne();
+
+    if (resetToken) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
     try {
       const decodedToken = await jwt.verify(token, process.env.SECRET);
