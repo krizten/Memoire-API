@@ -126,7 +126,10 @@ export class AuthService {
   }
 
   async signup(data: SignupDTO): Promise<IResponse> {
-    const email = data.email;
+    const { email, acceptTerms } = data;
+    if (!acceptTerms) {
+      throw new HttpException('User must accept terms and conditions', HttpStatus.BAD_REQUEST);
+    }
     let user = await this.userRepository.findOne({ where: { email } });
     if (user) {
       throw new HttpException(`Email already in use.`, HttpStatus.BAD_REQUEST);
