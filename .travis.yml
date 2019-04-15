@@ -1,34 +1,28 @@
-# language: node_js
-# node_js:
-#   - "10"
+language: node_js
+node_js:
+  - "10"
 
-# services:
-#   - docker
+notifications:
+  email:
+    on_success: never
+    on_failure: change
 
-# notifications:
-#   email:
-#     on_success: never
-#     on_failure: change
+before_script:
+ - npm prune
 
-# before_script:
-#  - npm prune
+install:
+  - npm install -g nyc coveralls codecov
 
-# before_install:
-#  - docker-compose up
+# script:
+  # - npm run coverage
+  # - npm run check-coverage
+  # - codecov --token=$CODECOV_TOKEN
+  # - codecov -f api/coverage/*.json
 
-# install:
-#   - npm install -g nyc coveralls codecov
+# after_success:
+#  - export CODECOV_TOKEN
+#  - bash <(curl -s https://codecov.io/bash)
+#  - codecov --token=:token
 
-# # script:
-#   # - npm run coverage
-#   # - npm run check-coverage
-#   # - codecov --token=$CODECOV_TOKEN
-#   # - codecov -f api/coverage/*.json
-
-# # after_success:
-# #  - export CODECOV_TOKEN
-# #  - bash <(curl -s https://codecov.io/bash)
-# #  - codecov --token=:token
-
-# # after_script:
-#   # - npm run report-coverage
+# after_script:
+  # - npm run report-coverage

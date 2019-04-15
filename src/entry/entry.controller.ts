@@ -24,13 +24,13 @@ import {
   ApiImplicitBody,
 } from '@nestjs/swagger';
 
-import { AuthGuard } from 'src/shared/auth.guard';
-import { ValidationPipe } from 'src/shared/validation.pipe';
-import { User } from 'src/decorators/user.decorator';
-import { FileLogger } from 'src/shared/file-logger.service';
+import { AuthGuard } from '../shared/auth.guard';
+import { ValidationPipe } from '../shared/validation.pipe';
+import { User } from '../decorators/user.decorator';
+import { FileLogger } from '../shared/file-logger.service';
 import { EntryService } from './entry.service';
-import { EntryDTO } from 'src/dto/entry.dto';
-import { PasswordDTO } from 'src/dto/password.dto';
+import { EntryDTO } from '../dto/entry.dto';
+import { PasswordDTO } from '../dto/password.dto';
 
 config();
 

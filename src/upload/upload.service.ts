@@ -3,7 +3,7 @@ import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import * as multer from 'multer';
 import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
-import { IResponse } from 'src/interfaces/response.interface';
+import { IResponse } from '../interfaces/response.interface';
 
 config();
 

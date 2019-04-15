@@ -8,8 +8,9 @@ import {
 import { getConnection } from 'typeorm';
 import { config } from 'dotenv';
 import * as jwt from 'jsonwebtoken';
-import { LogoutTokenEntity } from 'src/auth/logout-token.entity';
-import { ResetTokenEntity } from 'src/auth/reset-token.entity';
+
+import { LogoutTokenEntity } from '../auth/logout-token.entity';
+import { ResetTokenEntity } from '../auth/reset-token.entity';
 
 config();
 

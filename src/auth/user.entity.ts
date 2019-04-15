@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { EntryEntity } from 'src/entry/entry.entity';
+import { EntryEntity } from '../entry/entry.entity';
 
 @Entity('users')
 export class UserEntity {
