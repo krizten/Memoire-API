@@ -22,12 +22,12 @@ import {
 } from '@nestjs/swagger';
 import { Request } from 'express';
 
-import { FileLogger } from 'src/shared/file-logger.service';
+import { FileLogger } from '../shared/file-logger.service';
 import { AccountService } from './account.service';
-import { AuthGuard } from 'src/shared/auth.guard';
-import { User } from 'src/decorators/user.decorator';
-import { AccountDTO } from 'src/dto/account.dto';
-import { PasswordDTO } from 'src/dto/password.dto';
+import { AuthGuard } from '../shared/auth.guard';
+import { User } from '../decorators/user.decorator';
+import { AccountDTO } from '../dto/account.dto';
+import { PasswordDTO } from '../dto/password.dto';
 
 @ApiUseTags('Account')
 @ApiBearerAuth()

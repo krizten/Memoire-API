@@ -6,9 +6,8 @@ import {
   Column,
   ManyToOne,
 } from 'typeorm';
-import { ICoordinates } from 'src/interfaces/coordinates.interface';
-import { UserEntity } from 'src/auth/user.entity';
-import { GeoCoordinatesDTO } from 'src/dto/geo-coordinates.dto';
+import { UserEntity } from '../auth/user.entity';
+import { GeoCoordinatesDTO } from '../dto/geo-coordinates.dto';
 
 @Entity('entries')
 export class EntryEntity {

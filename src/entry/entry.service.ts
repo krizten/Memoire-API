@@ -4,10 +4,10 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
 import { EntryEntity } from './entry.entity';
-import { EntryDTO } from 'src/dto/entry.dto';
-import { IResponse } from 'src/interfaces/response.interface';
-import { UserEntity } from 'src/auth/user.entity';
-import { PasswordDTO } from 'src/dto/password.dto';
+import { EntryDTO } from '../dto/entry.dto';
+import { IResponse } from '../interfaces/response.interface';
+import { UserEntity } from '../auth/user.entity';
+import { PasswordDTO } from '../dto/password.dto';
 
 @Injectable()
 export class EntryService {

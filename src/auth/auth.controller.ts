@@ -22,15 +22,15 @@ import {
 } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-import { AuthGuard } from 'src/shared/auth.guard';
-import { FileLogger } from 'src/shared/file-logger.service';
-import { ValidationPipe } from 'src/shared/validation.pipe';
-import { User } from 'src/decorators/user.decorator';
-import { LoginDTO } from 'src/dto/login.dto';
-import { SignupDTO } from 'src/dto/signup.dto';
-import { ChangePasswordDTO } from 'src/dto/change-password.dto';
-import { EmailDTO } from 'src/dto/email.dto';
-import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
+import { AuthGuard } from '../shared/auth.guard';
+import { FileLogger } from '../shared/file-logger.service';
+import { ValidationPipe } from '../shared/validation.pipe';
+import { User } from '../decorators/user.decorator';
+import { LoginDTO } from '../dto/login.dto';
+import { SignupDTO } from '../dto/signup.dto';
+import { ChangePasswordDTO } from '../dto/change-password.dto';
+import { EmailDTO } from '../dto/email.dto';
+import { ResetPasswordDTO } from '../dto/reset-password.dto';
 
 @ApiUseTags('Authentication')
 @Controller(`${process.env.BASE_PATH}/auth`)

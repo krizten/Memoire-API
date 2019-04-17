@@ -5,12 +5,12 @@ import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 
-import { UserEntity } from 'src/auth/user.entity';
-import { LogoutTokenEntity } from 'src/auth/logout-token.entity';
-import { EntryEntity } from 'src/entry/entry.entity';
-import { IResponse } from 'src/interfaces/response.interface';
-import { AccountDTO } from 'src/dto/account.dto';
-import { PasswordDTO } from 'src/dto/password.dto';
+import { UserEntity } from '../auth/user.entity';
+import { LogoutTokenEntity } from '../auth/logout-token.entity';
+import { EntryEntity } from '../entry/entry.entity';
+import { IResponse } from '../interfaces/response.interface';
+import { AccountDTO } from '../dto/account.dto';
+import { PasswordDTO } from '../dto/password.dto';
 
 interface ResponseOptions {
   summary: string;

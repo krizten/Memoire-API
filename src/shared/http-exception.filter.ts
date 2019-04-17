@@ -1,6 +1,7 @@
 import { Catch, ExceptionFilter, HttpException, ArgumentsHost, Logger, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { IResponse } from 'src/interfaces/response.interface';
+
+import { IResponse } from '../interfaces/response.interface';
 import { FileLogger } from './file-logger.service';
 
 @Catch()

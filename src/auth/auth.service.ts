@@ -9,15 +9,15 @@ import * as sendGrid from '@sendgrid/mail';
 import { MailData } from '@sendgrid/helpers/classes/mail';
 
 import { UserEntity } from './user.entity';
-import { IResponse } from 'src/interfaces/response.interface';
-import { LoginDTO } from 'src/dto/login.dto';
-import { SignupDTO } from 'src/dto/signup.dto';
+import { IResponse } from '../interfaces/response.interface';
+import { LoginDTO } from '../dto/login.dto';
+import { SignupDTO } from '../dto/signup.dto';
 import { LogoutTokenEntity } from './logout-token.entity';
 import { ResetTokenEntity } from './reset-token.entity';
 import { resetPasswordTemplate } from './reset-pwd-template';
-import { ChangePasswordDTO } from 'src/dto/change-password.dto';
-import { EmailDTO } from 'src/dto/email.dto';
-import { ResetPasswordDTO } from 'src/dto/reset-password.dto';
+import { ChangePasswordDTO } from '../dto/change-password.dto';
+import { EmailDTO } from '../dto/email.dto';
+import { ResetPasswordDTO } from '../dto/reset-password.dto';
 
 config();
 
@@ -126,7 +126,10 @@ export class AuthService {
   }
 
   async signup(data: SignupDTO): Promise<IResponse> {
-    const email = data.email;
+    const { email, acceptTerms } = data;
+    if (!acceptTerms) {
+      throw new HttpException('User must accept terms and conditions', HttpStatus.BAD_REQUEST);
+    }
     let user = await this.userRepository.findOne({ where: { email } });
     if (user) {
       throw new HttpException(`Email already in use.`, HttpStatus.BAD_REQUEST);

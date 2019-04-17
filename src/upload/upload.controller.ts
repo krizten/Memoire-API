@@ -19,7 +19,7 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 
-import { AuthGuard } from 'src/shared/auth.guard';
+import { AuthGuard } from '../shared/auth.guard';
 import { UploadService } from './upload.service';
 
 config();
