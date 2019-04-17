@@ -9,8 +9,6 @@ notifications:
 
 before_script:
  - npm prune
-
-install:
   - npm install -g nyc coveralls codecov
 
 # script:
