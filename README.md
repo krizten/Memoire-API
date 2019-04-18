@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://memoireapp.com" target="blank"><img src="https://res.cloudinary.com/ddufn6ug6/image/upload/v1554277089/memoire-logo-name.png" width="200" alt="Memoire Logo" /></a>
+  <a href="https://memoirre.herokuapp.com/" target="blank"><img src="https://res.cloudinary.com/ddufn6ug6/image/upload/v1554277089/memoire-logo-name.png" width="200" alt="Memoire Logo" /></a>
 </p>
 
   <p align="center">Memoire is an online journal where users can pen down their thoughts and feelings. The Memoire WebAPI is powered by <a href="http://nestjs.com/" target="blank" title="A progressive Node.js framework for building efficient and scalable server-side applications, heavily inspired by Angular.">NestJS</a>.</p>
@@ -35,7 +35,7 @@
   - Install the project dependencies by running `npm install`
   - Create a .ENV file, using the [.env.example](.env.example) as a sample fill all the fields with correct data.
   - Ensure the database service is running, then start the server application in development mode by running `npm run start:dev`
-  - Use the [API documentation]() to see available endpoints.
+  - Use the [API documentation](https://memoirre.herokuapp.com/docs) to see available endpoints.
 
 - ##### Installing With Docker 🐳
   - Install [Docker](https://www.docker.com/) and [Docker-Compose](https://docs.docker.com/compose/) on your host environment (or PC).
@@ -47,26 +47,39 @@
 ## API Endpoints Documentation 📚
 
 Some of the available endpoints are listed below.
-| Endpoints | Description |
-| --- | --- |
-| `POST /api/v1/auth/signup` | Sign up a new user |
-| `POST /api/v1/auth/login` | Log in an existing user |
-| `GET /api/v1/entries` | Get all diary entries made by the user |
-| `POST /api/v1/entries` | Create a new diary entry |
-| `PUT /api/v1/entries/{id}` | Update an existing diary entry |
-| `DELETE /api/v1/entries/{id}` | Delete a diary entry |
-| `GET /api/v1/account` | Retrieve user's account details |
-| `POST /api/v1/uploads/avatar` | Upload a new avatar for the user |
-See complete documentation [here]().
+
+- `POST /api/v1/auth/signup :-->`  Sign up a new user
+- `POST /api/v1/auth/login :-->` Log in an existing user
+- `GET /api/v1/entries :-->` Get all diary entries made by the user
+- `POST /api/v1/entries :-->` Create a new diary entry
+- `PUT /api/v1/entries/{id} :-->` Update an existing diary entry
+- `DELETE /api/v1/entries/{id} :-->` Delete a diary entry
+- `GET /api/v1/account :-->` Retrieve user's account details
+- `POST /api/v1/uploads/avatar :-->` Upload a new avatar for the user
+See complete documentation [here](https://memoirre.herokuapp.com/docs).
 
 ## Testing 🚨
 
 - ##### Testing with Postman
   - Install [Postman](https://www.getpostman.com/) or any preferred REST API Client such as [Insomnia](https://insomnia.rest/), [Rest Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client), etc.
   - Get the application up and running by following the instructions in the _Installation Guide_ of this README.
-  - Use the [API documentation]() as a guide to access available endpoints.
+  - Use the [API documentation](https://memoirre.herokuapp.com/docs) as a guide to access available endpoints.
 
 ## Deployment (Production) 🚀
+For demonstration purposes, the Memoire WebAPI was deployed to [Heroku](https://www.heroku.com/) using the [free cloud hosting plan](https://www.heroku.com/free) bundled with free dyno hours and several options for data storage.
+
+##### Hosting with Heroku
+  - Create an account with [Heroku](https://signup.heroku.com/) or [log in](https://id.heroku.com/) if you already have an account.
+  - Download and install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) matching your operating system.
+  - Clone this [repository](https://github.com/krizten/Memoire-API) using `git clone https://github.com/krizten/Memoire-API.git`
+  - In your project root directory, run the command `heroku login` and supply the right credentials.
+  - With a working Docker installation, log in to Container Registry using `heroku container:login`
+  - Create a Heroku app by running `heroku create <app-name>`.
+  - Visit [Heroku Addons](http://elements.heroku.com/addons) to add PostgreSQL addon to the app. The connection string added to the app is usually of the format `postgres://YourUserName:YourPassword@YourHost:5432/YourDatabase`.
+  - Navigate to the settings area of the newly created app and use the `Config Vars` to add necessary environment variables (see [.env.example](.env.sample)).
+  - Build the image from the [Dockerfile](Dockerfile) and push to Container Registry using `heroku container:push web`.
+  - Release the image to the app using `heroku container:release web`.
+  - To access the deployed app, run `heroku open` which opens the app in your default browser.
 
 ## Improvements ✨
 
@@ -81,9 +94,9 @@ See complete documentation [here]().
 
 ## Licence 🔐
 
-This project is [MIT licensed](LICENSE).
+**[MIT licensed](LICENSE) © [Christian Effiong](https://github.com/krizten)**
 
 ## Credits 🙏
 
-- Author: [Christian Effiong](https://github.com/krizten)
 - [Wait-For shell script](https://github.com/eficode/wait-for) by [Eficode](https://github.com/eficode)
+- [UUID regex code snippet](https://gist.github.com/bugventure/f71337e3927c34132b9a) by [Jake Taylor](https://gist.github.com/jakewtaylor)

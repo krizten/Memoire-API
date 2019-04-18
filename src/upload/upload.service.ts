@@ -10,7 +10,7 @@ config();
 let targetFolder: string;
 
 const fileFilter = (req: any, file: any, cb: any) => {
-  const supportedMimetypes = ['image/png', 'image/jpeg', 'image/gif'];
+  const supportedMimetypes = ['image/png', 'image/jpeg'];
   (!supportedMimetypes.includes(file.mimetype)) ? cb(new Error('MIME type not supported.'), false) : cb(null, true);
 };
 
