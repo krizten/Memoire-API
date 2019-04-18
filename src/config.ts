@@ -1,7 +1,10 @@
 import { config } from 'dotenv';
+import { Logger } from '@nestjs/common';
 config();
 
 let configuration: any;
+
+Logger.log(process.env.NODE_ENV, 'Environment');
 
 switch (process.env.NODE_ENV) {
   case 'test':
