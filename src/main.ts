@@ -39,11 +39,12 @@ async function bootstrap() {
     .setVersion('1.0')
     .setContactEmail('mailstochristian@gmail.com')
     .setLicense('MIT', 'https://github.com/krizten/Memoire-API/blob/dev/LICENSE')
+    .setSchemes('https')
     .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api-docs', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(port);
   const startupMsg = `Server is running on http://${host}:${port}`;

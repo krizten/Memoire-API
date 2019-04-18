@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://memoireapp.com" target="blank"><img src="https://res.cloudinary.com/ddufn6ug6/image/upload/v1554277089/memoire-logo-name.png" width="200" alt="Memoire Logo" /></a>
+  <a href="https://memoirre.herokuapp.com/" target="blank"><img src="https://res.cloudinary.com/ddufn6ug6/image/upload/v1554277089/memoire-logo-name.png" width="200" alt="Memoire Logo" /></a>
 </p>
 
   <p align="center">Memoire is an online journal where users can pen down their thoughts and feelings. The Memoire WebAPI is powered by <a href="http://nestjs.com/" target="blank" title="A progressive Node.js framework for building efficient and scalable server-side applications, heavily inspired by Angular.">NestJS</a>.</p>
@@ -35,7 +35,7 @@
   - Install the project dependencies by running `npm install`
   - Create a .ENV file, using the [.env.example](.env.example) as a sample fill all the fields with correct data.
   - Ensure the database service is running, then start the server application in development mode by running `npm run start:dev`
-  - Use the [API documentation]() to see available endpoints.
+  - Use the [API documentation](https://memoirre.herokuapp.com/docs) to see available endpoints.
 
 - ##### Installing With Docker 🐳
   - Install [Docker](https://www.docker.com/) and [Docker-Compose](https://docs.docker.com/compose/) on your host environment (or PC).
@@ -47,24 +47,23 @@
 ## API Endpoints Documentation 📚
 
 Some of the available endpoints are listed below.
-| Endpoints | Description |
-| --- | --- |
-| `POST /api/v1/auth/signup` | Sign up a new user |
-| `POST /api/v1/auth/login` | Log in an existing user |
-| `GET /api/v1/entries` | Get all diary entries made by the user |
-| `POST /api/v1/entries` | Create a new diary entry |
-| `PUT /api/v1/entries/{id}` | Update an existing diary entry |
-| `DELETE /api/v1/entries/{id}` | Delete a diary entry |
-| `GET /api/v1/account` | Retrieve user's account details |
-| `POST /api/v1/uploads/avatar` | Upload a new avatar for the user |
-See complete documentation [here]().
+
+- `POST /api/v1/auth/signup :-->`  Sign up a new user
+- `POST /api/v1/auth/login :-->` Log in an existing user
+- `GET /api/v1/entries :-->` Get all diary entries made by the user
+- `POST /api/v1/entries :-->` Create a new diary entry
+- `PUT /api/v1/entries/{id} :-->` Update an existing diary entry
+- `DELETE /api/v1/entries/{id} :-->` Delete a diary entry
+- `GET /api/v1/account :-->` Retrieve user's account details
+- `POST /api/v1/uploads/avatar :-->` Upload a new avatar for the user
+See complete documentation [here](https://memoirre.herokuapp.com/docs).
 
 ## Testing 🚨
 
 - ##### Testing with Postman
   - Install [Postman](https://www.getpostman.com/) or any preferred REST API Client such as [Insomnia](https://insomnia.rest/), [Rest Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client), etc.
   - Get the application up and running by following the instructions in the _Installation Guide_ of this README.
-  - Use the [API documentation]() as a guide to access available endpoints.
+  - Use the [API documentation](https://memoirre.herokuapp.com/docs) as a guide to access available endpoints.
 
 ## Deployment (Production) 🚀
 
