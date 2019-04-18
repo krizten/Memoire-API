@@ -4,7 +4,15 @@ config();
 
 let configuration: any;
 
+// ======= LOGS START =======
 Logger.log(process.env.NODE_ENV, 'Environment');
+Logger.log(process.env.DB_TYPE, 'Environment');
+Logger.log(process.env.DB_HOST_PROD, 'Environment');
+Logger.log(process.env.DB_PORT_PROD, 'Environment');
+Logger.log(process.env.DB_USERNAME_PROD, 'Environment');
+Logger.log(process.env.DB_PASSWORD_PROD, 'Environment');
+Logger.log(process.env.DB_NAME_PROD, 'Environment');
+// ======= LOGS END =======
 
 switch (process.env.NODE_ENV) {
   case 'test':
