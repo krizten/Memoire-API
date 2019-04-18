@@ -56,7 +56,7 @@ Some of the available endpoints are listed below.
 - `DELETE /api/v1/entries/{id} :-->` Delete a diary entry
 - `GET /api/v1/account :-->` Retrieve user's account details
 - `POST /api/v1/uploads/avatar :-->` Upload a new avatar for the user
-<br>
+
 See complete documentation [here](https://memoirre.herokuapp.com/docs).
 
 ## Testing 🚨
