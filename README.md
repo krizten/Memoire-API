@@ -66,6 +66,20 @@ See complete documentation [here](https://memoirre.herokuapp.com/docs).
   - Use the [API documentation](https://memoirre.herokuapp.com/docs) as a guide to access available endpoints.
 
 ## Deployment (Production) 🚀
+For demonstration purposes, the Memoire WebAPI was deployed to [Heroku](https://www.heroku.com/) using the [free cloud hosting plan](https://www.heroku.com/free) bundled with free dyno hours and several options for data storage.
+
+##### Hosting with Heroku
+  - Create an account with [Heroku](https://signup.heroku.com/) or [log in](https://id.heroku.com/) if you already have an account.
+  - Download and install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) matching your operating system.
+  - Clone this [repository](https://github.com/krizten/Memoire-API) using `git clone https://github.com/krizten/Memoire-API.git`
+  - In your project root directory, run the command `heroku login` and supply the right credentials.
+  - With a working Docker installation, log in to Container Registry using `heroku container:login`
+  - Create a Heroku app by running `heroku create <app-name>`.
+  - Visit [Heroku Addons](http://elements.heroku.com/addons) to add PostgreSQL addon to the app. The connection string added to the app is usually of the format `postgres://YourUserName:YourPassword@YourHost:5432/YourDatabase`.
+  - Navigate to the settings area of the newly created app and use the `Config Vars` to add necessary environment variables (see [.env.example](.env.sample)).
+  - Build the image from the [Dockerfile](Dockerfile) and push to Container Registry using `heroku container:push web`.
+  - Release the image to the app using `heroku container:release web`.
+  - To access the deployed app, run `heroku open` which opens the app in your default browser.
 
 ## Improvements ✨
 
@@ -80,9 +94,9 @@ See complete documentation [here](https://memoirre.herokuapp.com/docs).
 
 ## Licence 🔐
 
-This project is [MIT licensed](LICENSE).
+**[MIT licensed](LICENSE) © [Christian Effiong](https://github.com/krizten)**
 
 ## Credits 🙏
 
-- Author: [Christian Effiong](https://github.com/krizten)
 - [Wait-For shell script](https://github.com/eficode/wait-for) by [Eficode](https://github.com/eficode)
+- [UUID regex code snippet](https://gist.github.com/bugventure/f71337e3927c34132b9a) by [Jake Taylor](https://gist.github.com/jakewtaylor)
