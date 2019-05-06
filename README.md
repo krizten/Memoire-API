@@ -88,6 +88,7 @@ For demonstration purposes, the Memoire WebAPI was deployed to [Heroku](https://
   - Integrate <abbr title="Continuous Integration & Delivery">CI/CD</abbr> for a better workflow management.
   - Automated testing for faster bug discovery and debugging.
   - Integrate <abbr title="WebSocket is a computer communications protocol, providing full-duplex communication channels over a single TCP connection.">WebSockets</abbr> on server and clients to reduce HTTP requests and improve on server availability.
+  - Implement database caching using [Redis](https://redis.io/) for faster data serving.
   - Layering <abbr title="GraphQL is an open-source data query and manipulation language for APIs, and a runtime for fulfilling queries with existing data.">GraphQL</abbr> on existing REST API to enjoy the <a href="https://blog.apollographql.com/layering-graphql-on-top-of-rest-569c915083ad#14d5" target="_blank">benefits of GraphQL</a>.
 - ##### Features
   - Verify user's account/email to prevent bots from registering.
