@@ -140,7 +140,6 @@ export class AuthService {
       summary: 'Signup successful',
       user,
       status: HttpStatus.CREATED,
-      showToken: true,
     });
   }
 
