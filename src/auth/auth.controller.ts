@@ -41,7 +41,10 @@ export class AuthController {
 
   @Post('/signup')
   /***** Swagger API Doc Start *****/
-  @ApiOperation({ title: 'Signup New User', description: 'Create a new user account' })
+  @ApiOperation({
+    title: 'Signup New User',
+    description: 'Create a new user account',
+  })
   @ApiCreatedResponse({ description: 'User signed up successfully' })
   @ApiBadRequestResponse({ description: 'Error in request headers or body' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
@@ -58,7 +61,10 @@ export class AuthController {
 
   @Post('/login')
   /***** Swagger API Doc Start *****/
-  @ApiOperation({ title: 'Login Registered User', description: 'Login an existing user with valid credentials' })
+  @ApiOperation({
+    title: 'Login Registered User',
+    description: 'Login an existing user with valid credentials',
+  })
   @ApiCreatedResponse({ description: 'User logged in successfully' })
   @ApiBadRequestResponse({ description: 'Error in request headers or body' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
@@ -76,9 +82,14 @@ export class AuthController {
   @Get('/logout')
   /***** Swagger API Doc Start *****/
   @ApiBearerAuth()
-  @ApiOperation({ title: 'Logout User', description: 'Log out a previously signed-in user' })
+  @ApiOperation({
+    title: 'Logout User',
+    description: 'Log out a previously signed-in user',
+  })
   @ApiOkResponse({ description: 'User logged out successfully' })
-  @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
+  @ApiForbiddenResponse({
+    description: 'Authorization has been denied for this request',
+  })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   /***** Swagger API Doc End *****/
   @UseGuards(new AuthGuard())
@@ -89,15 +100,24 @@ export class AuthController {
   @Post('/change-password')
   /***** Swagger API Doc Start *****/
   @ApiBearerAuth()
-  @ApiOperation({ title: 'Change Current Password', description: `Change user's current password` })
+  @ApiOperation({
+    title: 'Change Current Password',
+    description: `Change user's current password`,
+  })
   @ApiCreatedResponse({ description: 'Password changed successfully' })
   @ApiBadRequestResponse({ description: 'Error in request headers or body' })
-  @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
+  @ApiForbiddenResponse({
+    description: 'Authorization has been denied for this request',
+  })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   /***** Swagger API Doc End *****/
   @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())
-  changePassword(@Req() request: Request, @User('id') user: string, @Body() data: ChangePasswordDTO) {
+  changePassword(
+    @Req() request: Request,
+    @User('id') user: string,
+    @Body() data: ChangePasswordDTO,
+  ) {
     FileLogger.log({
       method: 'POST',
       user,
@@ -109,7 +129,10 @@ export class AuthController {
 
   @Post('/forgot-password')
   /***** Swagger API Doc Start *****/
-  @ApiOperation({ title: 'User Forgot Password', description: `Send password reset link to user's email` })
+  @ApiOperation({
+    title: 'User Forgot Password',
+    description: `Send password reset link to user's email`,
+  })
   @ApiCreatedResponse({ description: 'Password reset email sent to user' })
   @ApiBadRequestResponse({ description: 'Error in request headers or body' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
@@ -125,14 +148,19 @@ export class AuthController {
   }
 
   @Post('/reset-password')
-   /***** Swagger API Doc Start *****/
-   @ApiBearerAuth()
-   @ApiOperation({ title: 'Reset User Password', description: `Reset user's password to overwrite forgotten password` })
-   @ApiCreatedResponse({ description: 'Password reset was successful' })
-   @ApiBadRequestResponse({ description: 'Error in request headers or body' })
-   @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
-   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-   /***** Swagger API Doc End *****/
+  /***** Swagger API Doc Start *****/
+  @ApiBearerAuth()
+  @ApiOperation({
+    title: 'Reset User Password',
+    description: `Reset user's password to overwrite forgotten password`,
+  })
+  @ApiCreatedResponse({ description: 'Password reset was successful' })
+  @ApiBadRequestResponse({ description: 'Error in request headers or body' })
+  @ApiForbiddenResponse({
+    description: 'Authorization has been denied for this request',
+  })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  /***** Swagger API Doc End *****/
   @UsePipes(new ValidationPipe())
   resetPassword(@Query('key') token: string, @Body() data: ResetPasswordDTO) {
     FileLogger.log({
@@ -142,5 +170,25 @@ export class AuthController {
     });
     this.logger.log(`${JSON.stringify({ method: 'POST', token, data })}`);
     return this.authService.resetPassword(token, data);
+  }
+
+  @Get('/self')
+  /***** Swagger API Doc Start *****/
+  @ApiBearerAuth()
+  @ApiOperation({
+    title: 'Current User Information',
+    description: `Retrieve the information of the current user`,
+  })
+  @ApiOkResponse({ description: `User's information retrieved successfully` })
+  @ApiBadRequestResponse({ description: 'Error in request headers or body' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  /***** Swagger API Doc End *****/
+  @UseGuards(new AuthGuard())
+  getSelf(@User('id') user: string) {
+    FileLogger.log({
+      method: 'GET',
+    });
+    this.logger.log(`${JSON.stringify({ method: 'GET'})}`);
+    return this.authService.self(user);
   }
 }

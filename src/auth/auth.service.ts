@@ -96,9 +96,18 @@ export class AuthService {
     showToken = false,
     account = false,
   }: ResponseOptions): IResponse {
-
     if (user) {
-      const { id, created, email, avatar, bio, gender, dateOfBirth, entries, name } = user;
+      const {
+        id,
+        created,
+        email,
+        avatar,
+        bio,
+        gender,
+        dateOfBirth,
+        entries,
+        name,
+      } = user;
       const token = this.token(id, email, '7d');
       let data: any = { id, created, email };
 
@@ -107,7 +116,15 @@ export class AuthService {
       }
 
       if (account) {
-        data = { name, email, dateOfBirth, gender, avatar, bio, entriesTillDate: entries.length };
+        data = {
+          name,
+          email,
+          dateOfBirth,
+          gender,
+          avatar,
+          bio,
+          entriesTillDate: entries.length,
+        };
       }
 
       return {
@@ -128,7 +145,10 @@ export class AuthService {
   async signup(data: SignupDTO): Promise<IResponse> {
     const { email, acceptTerms } = data;
     if (!acceptTerms) {
-      throw new HttpException('User must accept terms and conditions', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'User must accept terms and conditions',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     let user = await this.userRepository.findOne({ where: { email } });
     if (user) {
@@ -298,5 +318,17 @@ export class AuthService {
       .execute();
 
     return this.responseFormat({ summary: 'Password reset was successful' });
+  }
+
+  async self(userId: string) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+
+    return this.responseFormat({
+      user,
+      summary: `User's information retrieved successfully`,
+    });
   }
 }
