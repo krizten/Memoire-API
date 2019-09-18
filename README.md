@@ -91,6 +91,7 @@ For demonstration purposes, the Memoire WebAPI was deployed to [Heroku](https://
   - Implement database caching using [Redis](https://redis.io/) for faster data serving.
   - Layering <abbr title="GraphQL is an open-source data query and manipulation language for APIs, and a runtime for fulfilling queries with existing data.">GraphQL</abbr> on existing REST API to enjoy the <a href="https://blog.apollographql.com/layering-graphql-on-top-of-rest-569c915083ad#14d5" target="_blank">benefits of GraphQL</a>.
   - Replace Winston FileLogger with a dedicated logging service such as [Sentry](https://sentry.io) to improve performance.
+  - Perform scaling in production environment by taking advantage of [Nginx](https://www.nginx.com/), [PM2](http://pm2.keymetrics.io/) or easy-to-use [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/).
 - ##### Features
   - Verify user's account/email to prevent bots from registering.
   - Tracking usage history (last seen and time spent on the app).
