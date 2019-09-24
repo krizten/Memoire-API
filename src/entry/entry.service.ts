@@ -119,7 +119,10 @@ export class EntryService {
       relations: ['author'],
     });
 
-    return this.responseFormat('Entry updated successfully', { id });
+    return this.responseFormat(
+      'Entry updated successfully',
+      this.formatResponseData(entry),
+    );
   }
 
   async delete(userId: string, id: string): Promise<IResponse> {
@@ -133,7 +136,7 @@ export class EntryService {
     }
     this.confirmAuthorship(userId, entry);
     await this.entryRepository.delete({ id });
-    return this.responseFormat('Entry deleted successfully');
+    return this.responseFormat('Entry deleted successfully', { id });
   }
 
   async deleteAll(userId: string, data: PasswordDTO) {
