@@ -119,10 +119,7 @@ export class EntryService {
       relations: ['author'],
     });
 
-    return this.responseFormat(
-      'Entry updated successfully',
-      this.formatResponseData(entry),
-    );
+    return this.responseFormat('Entry updated successfully', { id });
   }
 
   async delete(userId: string, id: string): Promise<IResponse> {
