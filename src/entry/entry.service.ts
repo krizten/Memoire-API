@@ -136,7 +136,7 @@ export class EntryService {
     }
     this.confirmAuthorship(userId, entry);
     await this.entryRepository.delete({ id });
-    return this.responseFormat('Entry deleted successfully', { id });
+    return this.responseFormat('Entry deleted successfully');
   }
 
   async deleteAll(userId: string, data: PasswordDTO) {
