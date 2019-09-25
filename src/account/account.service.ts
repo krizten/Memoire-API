@@ -22,7 +22,6 @@ interface ResponseOptions {
 
 @Injectable()
 export class AccountService {
-
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
@@ -48,9 +47,18 @@ export class AccountService {
     showToken = false,
     account = false,
   }: ResponseOptions): IResponse {
-
     if (user) {
-      const { id, created, email, avatar, bio, gender, dateOfBirth, entries, name } = user;
+      const {
+        id,
+        created,
+        email,
+        avatar,
+        bio,
+        gender,
+        dateOfBirth,
+        entries,
+        name,
+      } = user;
       const token = this.token(id, email, '7d');
       let data: any = { id, created, email };
 
@@ -59,7 +67,15 @@ export class AccountService {
       }
 
       if (account) {
-        data = { name, email, dateOfBirth, gender, avatar, bio, entriesTillDate: entries.length };
+        data = {
+          name,
+          email,
+          dateOfBirth,
+          gender,
+          avatar,
+          bio,
+          entriesTillDate: entries.length,
+        };
       }
 
       return {
@@ -104,7 +120,10 @@ export class AccountService {
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
     }
     await this.userRepository.update({ id: userId }, data);
-    user = await this.userRepository.findOne({ where: { id: userId } });
+    user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['entries'],
+    });
     return this.responseFormat({
       summary: 'User details updated successfully.',
       user,
