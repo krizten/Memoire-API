@@ -110,4 +110,12 @@ typings/
 # Ignore all local history of files
 .history
 
+# Logs
+logs
+logs/*
+*.log
+
 # End of https://www.gitignore.io/api/node,linux,visualstudiocode
+
+# Docker
+docker-volumes
