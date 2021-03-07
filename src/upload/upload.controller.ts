@@ -7,10 +7,10 @@ import {
   Res,
 } from '@nestjs/common';
 import {
-  ApiUseTags,
+  ApiTags,
   ApiBearerAuth,
   ApiConsumes,
-  ApiImplicitFile,
+  ApiBody,
   ApiOperation,
   ApiOkResponse,
   ApiForbiddenResponse,
@@ -24,18 +24,29 @@ import { UploadService } from './upload.service';
 
 config();
 
-@ApiUseTags('Uploads')
+@ApiTags('Uploads')
 @ApiBearerAuth()
 @Controller(`${process.env.BASE_PATH}/uploads`)
 @UseGuards(new AuthGuard())
 export class UploadController {
-  constructor(private uploadService: UploadService) {}
+  constructor(private uploadService: UploadService) { }
 
   @Post('/image')
   /***** Swagger API Doc Start *****/
-  @ApiOperation({ title: 'Upload Entry Image', description: 'Upload a descriptive image for that entry to Amazon S3 (max size: 200KB)' })
+  @ApiOperation({ summary: 'Upload Entry Image', description: 'Upload a descriptive image for that entry (max size: 200KB)' })
   @ApiConsumes('multipart/form-data')
-  @ApiImplicitFile({ name: 'image', required: true, description: 'Add image to entry. (Supported MIME types: png, jpeg)' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      description: 'Add image to entry. (Supported MIME types: png, jpeg)',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @ApiOkResponse({ description: 'Image upload successfully' })
   @ApiBadRequestResponse({ description: 'Error in request headers or body' })
   @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })
@@ -48,9 +59,20 @@ export class UploadController {
 
   @Post('/avatar')
   /***** Swagger API Doc Start *****/
-  @ApiOperation({ title: 'Upload User Avatar', description: 'Upload a new avatar for the user to Amazon S3 (max size: 200KB)' })
+  @ApiOperation({ summary: 'Upload User Avatar', description: 'Upload a new avatar for the user (max size: 200KB)' })
   @ApiConsumes('multipart/form-data')
-  @ApiImplicitFile({ name: 'avatar', required: true, description: 'Upload new avatar. (Supported MIME types: png, jpeg)' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      description: 'Add image to entry. (Supported MIME types: png, jpeg)',
+      properties: {
+        avatar: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @ApiOkResponse({ description: 'Avatar upload successfully' })
   @ApiBadRequestResponse({ description: 'Error in request headers or body' })
   @ApiForbiddenResponse({ description: 'Authorization has been denied for this request' })

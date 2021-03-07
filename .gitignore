@@ -119,3 +119,7 @@ logs/*
 
 # Docker
 docker-volumes
+
+# Other
+dist/
+.DS_Store

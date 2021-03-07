@@ -18,10 +18,7 @@ switch (process.env.NODE_ENV) {
         database: process.env.DB_NAME_TEST,
         synchronize: (process.env.DB_SYNC === 'true'),
         logging: (process.env.DB_LOG === 'true'),
-        entities: [
-          './src/**/*.entity.ts',
-          './dist/**/*.entity.js',
-        ],
+        entities: ['dist/**/*.entity.js'],
       },
     };
     break;
@@ -39,10 +36,7 @@ switch (process.env.NODE_ENV) {
         database: process.env.DB_NAME_PROD,
         synchronize: (process.env.DB_SYNC === 'true'),
         logging: (process.env.DB_LOG === 'true'),
-        entities: [
-          './src/**/*.entity.ts',
-          './dist/**/*.entity.js',
-        ],
+        entities: ['dist/**/*.entity.js'],
       },
     };
     break;
@@ -60,10 +54,7 @@ switch (process.env.NODE_ENV) {
         database: process.env.DB_NAME_DEV,
         synchronize: (process.env.DB_SYNC === 'true'),
         logging: (process.env.DB_LOG === 'true'),
-        entities: [
-          './src/**/*.entity.ts',
-          './dist/**/*.entity.js',
-        ],
+        entities: ['dist/**/*.entity.js'],
       },
     };
     break;

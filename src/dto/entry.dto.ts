@@ -1,22 +1,22 @@
 import { IsString, ValidateIf, IsUrl, ValidateNested } from 'class-validator';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { GeoCoordinatesDTO } from './geo-coordinates.dto';
 
 export class EntryDTO {
-  @ApiModelProperty({
+  @ApiProperty({
     description: 'title of entry',
   })
   @IsString()
   readonly title: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: 'content of entry',
   })
   @IsString()
   readonly content: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     required: false,
     description: 'optional descriptive image to go with entry',
   })
@@ -25,7 +25,7 @@ export class EntryDTO {
   @IsUrl()
   readonly image?: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     required: false,
     description: 'optional geolocation to capture where location associated with entry',
   })

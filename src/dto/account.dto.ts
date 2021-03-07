@@ -1,37 +1,37 @@
 import { IsString, IsNotEmpty, IsUrl, IsDateString } from 'class-validator';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class AccountDTO {
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's fullname`,
   })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's avatar URL`,
   })
   @IsString()
   @IsUrl()
   avatar: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's date of birth`,
     type: String,
   })
   @IsDateString()
   dateOfBirth: Date;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's gender`,
   })
   @IsNotEmpty()
   @IsString()
   gender: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's biography (About me)`,
   })
   @IsNotEmpty()

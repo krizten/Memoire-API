@@ -1,5 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
@@ -12,9 +11,9 @@ import { PasswordDTO } from '../dto/password.dto';
 @Injectable()
 export class EntryService {
   constructor(
-    @InjectRepository(EntryEntity)
+    @Inject('ENTRY_REPOSITORY')
     private entryRepository: Repository<EntryEntity>,
-    @InjectRepository(UserEntity)
+    @Inject('USER_REPOSITORY')
     private userRepository: Repository<UserEntity>,
   ) {}
 

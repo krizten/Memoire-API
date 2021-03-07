@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import {
-  ApiUseTags,
+  ApiTags,
   ApiBearerAuth,
   ApiOperation,
   ApiCreatedResponse,
@@ -32,7 +32,7 @@ import { ChangePasswordDTO } from '../dto/change-password.dto';
 import { EmailDTO } from '../dto/email.dto';
 import { ResetPasswordDTO } from '../dto/reset-password.dto';
 
-@ApiUseTags('Authentication')
+@ApiTags('Authentication')
 @Controller(`${process.env.BASE_PATH}/auth`)
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -42,7 +42,7 @@ export class AuthController {
   @Post('/signup')
   /***** Swagger API Doc Start *****/
   @ApiOperation({
-    title: 'Signup New User',
+    summary: 'Signup New User',
     description: 'Create a new user account',
   })
   @ApiCreatedResponse({ description: 'User signed up successfully' })
@@ -62,7 +62,7 @@ export class AuthController {
   @Post('/login')
   /***** Swagger API Doc Start *****/
   @ApiOperation({
-    title: 'Login Registered User',
+    summary: 'Login Registered User',
     description: 'Login an existing user with valid credentials',
   })
   @ApiCreatedResponse({ description: 'User logged in successfully' })
@@ -83,7 +83,7 @@ export class AuthController {
   /***** Swagger API Doc Start *****/
   @ApiBearerAuth()
   @ApiOperation({
-    title: 'Logout User',
+    summary: 'Logout User',
     description: 'Log out a previously signed-in user',
   })
   @ApiOkResponse({ description: 'User logged out successfully' })
@@ -101,7 +101,7 @@ export class AuthController {
   /***** Swagger API Doc Start *****/
   @ApiBearerAuth()
   @ApiOperation({
-    title: 'Change Current Password',
+    summary: 'Change Current Password',
     description: `Change user's current password`,
   })
   @ApiCreatedResponse({ description: 'Password changed successfully' })
@@ -130,7 +130,7 @@ export class AuthController {
   @Post('/forgot-password')
   /***** Swagger API Doc Start *****/
   @ApiOperation({
-    title: 'User Forgot Password',
+    summary: 'User Forgot Password',
     description: `Send password reset link to user's email`,
   })
   @ApiCreatedResponse({ description: 'Password reset email sent to user' })
@@ -151,7 +151,7 @@ export class AuthController {
   /***** Swagger API Doc Start *****/
   @ApiBearerAuth()
   @ApiOperation({
-    title: 'Reset User Password',
+    summary: 'Reset User Password',
     description: `Reset user's password to overwrite forgotten password`,
   })
   @ApiCreatedResponse({ description: 'Password reset was successful' })
@@ -176,7 +176,7 @@ export class AuthController {
   /***** Swagger API Doc Start *****/
   @ApiBearerAuth()
   @ApiOperation({
-    title: 'Current User Information',
+    summary: 'Current User Information',
     description: `Retrieve the information of the current user`,
   })
   @ApiOkResponse({ description: `User's information retrieved successfully` })

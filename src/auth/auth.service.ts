@@ -1,12 +1,10 @@
 import { config } from 'dotenv';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { Repository, getConnection } from 'typeorm';
 import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 import * as sendGrid from '@sendgrid/mail';
-import { MailData } from '@sendgrid/helpers/classes/mail';
 
 import { UserEntity } from './user.entity';
 import { IResponse } from '../interfaces/response.interface';
@@ -32,11 +30,11 @@ interface ResponseOptions {
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity)
+    @Inject('USER_REPOSITORY')
     private userRepository: Repository<UserEntity>,
-    @InjectRepository(LogoutTokenEntity)
+    @Inject('LOGOUT_TOKEN_REPOSITORY')
     private logoutTokenRepository: Repository<LogoutTokenEntity>,
-  ) {}
+  ) { }
 
   // get token
   private token(id: string, email: string, duration: string): string {
@@ -277,7 +275,7 @@ export class AuthService {
       .execute();
 
     sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
-    const message: MailData = {
+    const message = {
       to: email,
       from: 'no-reply@memoireapp.com',
       subject: `Hi, ${user.name}! Having Trouble Signing In? 😊`,

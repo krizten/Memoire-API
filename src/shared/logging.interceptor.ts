@@ -3,6 +3,7 @@ import {
   NestInterceptor,
   ExecutionContext,
   Logger,
+  CallHandler
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
@@ -14,12 +15,12 @@ import { FileLogger } from './file-logger.service';
 export class LoggingInterceptor implements NestInterceptor {
   intercept(
     context: ExecutionContext,
-    next$: Observable<any>,
+    next: CallHandler,
   ): Observable<any> {
     const request = context.switchToHttp().getRequest<Request>();
     const now = Date.now();
 
-    return next$.pipe(
+    return next.handle().pipe(
       tap(() => {
         FileLogger.log({
           method: request.method,

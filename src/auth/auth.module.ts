@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UserEntity } from './user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { LogoutTokenEntity } from './logout-token.entity';
+import { DatabaseModule } from 'src/database/database.module';
+import { userProviders } from './user.providers';
+import { logoutTokenProviders } from './logout-token.providers';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserEntity, LogoutTokenEntity]),
-  ],
+  imports: [DatabaseModule],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [...userProviders, ...logoutTokenProviders, AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

@@ -1,14 +1,14 @@
 import { MinLength, IsNotEmpty } from 'class-validator';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ChangePasswordDTO {
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's current password`,
   })
   @IsNotEmpty()
   currentPassword: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's new password`,
     minLength: 6,
   })
@@ -16,7 +16,7 @@ export class ChangePasswordDTO {
   @IsNotEmpty()
   newPassword: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `confirm new password`,
     minLength: 6,
   })

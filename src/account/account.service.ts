@@ -1,5 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { Repository, getConnection } from 'typeorm';
 import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
@@ -23,9 +22,9 @@ interface ResponseOptions {
 @Injectable()
 export class AccountService {
   constructor(
-    @InjectRepository(UserEntity)
+    @Inject('USER_REPOSITORY')
     private userRepository: Repository<UserEntity>,
-    @InjectRepository(EntryEntity)
+    @Inject('ENTRY_REPOSITORY')
     private entryRepository: Repository<EntryEntity>,
   ) {}
 

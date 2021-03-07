@@ -6,24 +6,24 @@ import {
   IsUrl,
   IsBoolean,
 } from 'class-validator';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class SignupDTO {
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's fullname`,
   })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's email`,
   })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's password`,
     minLength: 6,
   })
@@ -31,14 +31,14 @@ export class SignupDTO {
   @IsNotEmpty()
   password: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's avatar`,
   })
   @IsString()
   @IsUrl()
   avatar: string;
 
-  @ApiModelProperty({
+  @ApiProperty({
     description: `user's acceptance of terms and conditions`,
   })
   @IsBoolean()

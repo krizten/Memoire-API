@@ -1,14 +1,14 @@
 import { IsNumber } from 'class-validator';
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class GeoCoordinatesDTO {
-  @ApiModelProperty({
+  @ApiProperty({
     description: 'latitude of geolocation',
   })
   @IsNumber()
   readonly lat: number;
 
-  @ApiModelProperty({
+  @ApiProperty({
       description: 'latitude of geolocation',
     })
   @IsNumber()
